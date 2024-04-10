@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
 <template>
 
 <RouterLink to="/">Home</RouterLink>
+<RouterLink to="/aaa">aaa</RouterLink>
 
 </template>
 
