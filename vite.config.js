@@ -16,12 +16,23 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        // 配置 ElementPlus 採用 sass 樣式配色系統
+        ElementPlusResolver({importStyle:"sass"})],
     }),
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // 自動導入訂製化樣式文件進行樣式覆蓋
+        additionalData:`
+        `
+      }
     }
   }
 })
