@@ -5,17 +5,10 @@ import Header from './components/Header.vue';
 </script>
 
 <template>
-    <div class="header">
-        <Header />
-    </div>
+    <!-- <Header /> -->
 
     <RouterView />
 
 </template>
 
-<style lang="scss" scoped>
-.header{
-height: 70px;
-background-color: #ecb5b5;
-}
-</style>
+<style lang="scss" scoped></style>
