@@ -2,15 +2,16 @@
 import LayoutNav from '@/components/Layout/LayoutNav.vue'
 import LayoutHeader from '@/components/Layout/LayoutHeader.vue'
 import LayoutFooter from '@/components/Layout/LayoutFooter.vue'
+import LayoutFixed from '@/components/Layout/LayoutFixed.vue'
 
-import { useScroll } from '@vueuse/core'
 </script>
 
 <template>
+    <LayoutFixed />
     <LayoutNav />
     <LayoutHeader />
     <h1>home</h1>
-    <div style="height: 500px;"></div>
+    <div style="height: 800px;"></div>
     <LayoutFooter />
 </template>
 

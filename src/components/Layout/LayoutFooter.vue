@@ -65,7 +65,7 @@
 <style lang="scss" scoped>
 .firstArea {
     height: 190px;
-    border: 1px solid #9eac9c;
+    border-top: 1px solid #9eac9c;
     color: #304539;
     display: flex;
     align-items: center;

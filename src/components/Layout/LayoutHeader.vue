@@ -17,7 +17,8 @@ onMounted(() => {
 <template>
     <div class="bgArea">
         <img src="/logo.png" alt="">
-        <div class="link" v-for="item in categoryList" :key="item.id">
+        <router-link class="link" to="/">首頁</router-link>
+        <div class="rounterItem" v-for="item in categoryList" :key="item.id">
             <router-link class="link" to="/">{{ item.name }}</router-link>
         </div>
         <!-- <span>首頁</span>
@@ -38,7 +39,7 @@ onMounted(() => {
 .bgArea {
     height: 100px;
     color: #304539;
-    border: 1px solid #000000;
+    border-bottom: 1px solid #7a8d78;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -53,6 +54,7 @@ onMounted(() => {
     .link {
         color: #304539;
         text-decoration: none;
+
         &:hover{
             color: #8daa9a;
         }
