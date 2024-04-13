@@ -1,12 +1,31 @@
+<script setup>
+import { getCategoryAPI } from '@/apis/layout'
+import { onMounted, ref } from 'vue'
+
+const categoryList = ref([])
+const getCategory = async () => {
+    const res = await getCategoryAPI()
+    console.log(res)
+    categoryList.value = res.result
+}
+
+onMounted(() => {
+    getCategory()
+})
+</script>
+
 <template>
     <div class="bgArea">
         <img src="/logo.png" alt="">
-        <span>首頁</span>
+        <div class="link" v-for="item in categoryList" :key="item.id">
+            <router-link class="link" to="/">{{ item.name }}</router-link>
+        </div>
+        <!-- <span>首頁</span>
         <span>居家</span>
         <span>食品</span>
         <span>服飾</span>
         <span>3C</span>
-        <span>其他</span>
+        <span>其他</span> -->
         <div class="searchArea">
             <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
 
@@ -31,18 +50,27 @@
         height: 70px;
     }
 
+    .link {
+        color: #304539;
+        text-decoration: none;
+        &:hover{
+            color: #8daa9a;
+        }
+    }
+
     input {
         width: 150px;
         height: 25px;
-        border-radius: 5px;
-        border: 2px solid #304539;
+        border: white;
+        border-bottom: 2px solid #82998b;
+        padding-left: 5px;
     }
 
     .fa-magnifying-glass {
         font-size: 16pt;
 
         &:hover {
-            cursor:pointer;
+            cursor: pointer;
             color: #9eb3a7;
         }
     }
