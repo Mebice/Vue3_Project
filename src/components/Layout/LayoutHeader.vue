@@ -1,32 +1,18 @@
 <script setup>
-import { getCategoryAPI } from '@/apis/layout'
-import { onMounted, ref } from 'vue'
+import { useCategoryStore } from '@/stores/category'
 
-const categoryList = ref([])
-const getCategory = async () => {
-    const res = await getCategoryAPI()
-    console.log(res)
-    categoryList.value = res.result
-}
+// 使用 pinna 管理
+const categoryStore = useCategoryStore()
 
-onMounted(() => {
-    getCategory()
-})
 </script>
 
 <template>
     <div class="bgArea">
         <img src="/logo.png" alt="">
         <router-link class="link" to="/">首頁</router-link>
-        <div class="rounterItem" v-for="item in categoryList" :key="item.id">
+        <div class="rounterItem" v-for="item in categoryStore.categoryList" :key="item.id">
             <router-link class="link" to="/">{{ item.name }}</router-link>
         </div>
-        <!-- <span>首頁</span>
-        <span>居家</span>
-        <span>食品</span>
-        <span>服飾</span>
-        <span>3C</span>
-        <span>其他</span> -->
         <div class="searchArea">
             <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
 
@@ -37,7 +23,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .bgArea {
-    height: 100px;
+    height: 80px;
     color: #304539;
     border-bottom: 1px solid #7a8d78;
     display: flex;
@@ -47,8 +33,8 @@ onMounted(() => {
     font-weight: 700;
 
     img {
-        width: 150px;
-        height: 70px;
+        width: 140px;
+        height: 60px;
     }
 
     .link {

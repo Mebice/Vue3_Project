@@ -4,16 +4,34 @@ import LayoutHeader from '@/components/Layout/LayoutHeader.vue'
 import LayoutFooter from '@/components/Layout/LayoutFooter.vue'
 import LayoutFixed from '@/components/Layout/LayoutFixed.vue'
 
+import HomeCategory from '@/components/Home/HomeCategory.vue'
+import HomeBanner from '@/components/Home/HomeBanner.vue'
+import HomeNew from '@/components/Home/HomeNew.vue'
+import HomeHot from '@/components/Home/HomeHot.vue'
+import homeProduct from '@/components/Home/HomeProduct.vue'
+
+// 觸發獲取header數據列表的 action
+import { useCategoryStore } from '@/stores/category'
+import { onMounted } from 'vue'
+
+const categoryStore = useCategoryStore()
+
+onMounted(() => categoryStore.getCategory())
+
 </script>
 
 <template>
     <LayoutFixed />
     <LayoutNav />
     <LayoutHeader />
-    <h1>home</h1>
-    <div style="height: 800px;"></div>
+
+    <HomeCategory />
+    <HomeBanner />
+    <HomeNew />
+    <HomeHot />
+    <homeProduct />
+
     <LayoutFooter />
 </template>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

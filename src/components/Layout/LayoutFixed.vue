@@ -1,28 +1,27 @@
 <script setup>
+import { useCategoryStore } from '@/stores/category'
 // vueUse
 import { useScroll } from '@vueuse/core'
 const { y } = useScroll(window)
+
+// 使用 pinna 管理
+const categoryStore = useCategoryStore()
+
 </script>
 <template>
-<div class="header-sticky" :class="{ show : y > 120 }">
-    <!-- {{ y }} -->
-    <img src="/logo.png" alt="">
-    <RouterLink class="link" to="/">首頁</RouterLink>
-    <RouterLink class="link" to="/">居家</RouterLink>
-    <RouterLink class="link" to="/">美食</RouterLink>
-    <RouterLink class="link" to="/">服飾</RouterLink>
-    <RouterLink class="link" to="/">母嬰</RouterLink>
-    <RouterLink class="link" to="/">個護</RouterLink>
-    <RouterLink class="link" to="/">嚴選</RouterLink>
-    <RouterLink class="link" to="/">數碼</RouterLink>
-    <RouterLink class="link" to="/">運動</RouterLink>
-    <RouterLink class="link" to="/">雜項</RouterLink>
-    <div class="searchArea">
+    <div class="header-sticky" :class="{ show: y > 120 }">
+        <!-- {{ y }} -->
+        <img src="/logo.png" alt="">
+        <RouterLink class="link" to="/">首頁</RouterLink>
+        <div class="routerItem" v-for="item in categoryStore.categoryList" :key="item.id">
+            <RouterLink class="link" to="/">{{ item.name }}</RouterLink>
+        </div>
+        <div class="searchArea">
             <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
 
         </div>
         <i class="fa-solid fa-cart-shopping"></i>
-</div>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -45,7 +44,7 @@ const { y } = useScroll(window)
     opacity: 0;
 
     // 移除平移 + 不透明
-    &.show{
+    &.show {
         transition: all 0.3s linear;
         transform: none;
         opacity: 1;
@@ -59,7 +58,8 @@ const { y } = useScroll(window)
     .link {
         color: #304539;
         text-decoration: none;
-        &:hover{
+
+        &:hover {
             color: #8daa9a;
         }
     }
@@ -84,4 +84,5 @@ const { y } = useScroll(window)
     .fa-cart-shopping {
         font-size: 20pt;
     }
-}</style>
+}
+</style>

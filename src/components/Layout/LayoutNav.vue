@@ -13,7 +13,7 @@
 
 <style lang="scss" scoped>
 .navArea {
-    height: 50px;
+    height: 40px;
     background-color: #304539;
     display: flex;
     align-items: center;
