@@ -1,156 +1,178 @@
 <script setup>
 import { useCategoryStore } from '@/stores/category'
-// import { ref } from 'vue'
-// const arr = ref([1, 2, 3, 4, 5, 6, 7, 8, 9])
-// const arr2 = ref([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 const categoryStore = useCategoryStore()
 
 </script>
 
 <template>
-    <div class="bgArea">
-        <div class="outSide">
-            <div class="" v-for="item in categoryStore.categoryList" :key="item.id">
-                <div class="menu">
-                    <span class="text1">{{ item.name }}</span>
-                    <span v-for="i in item.children.slice(0, 2)" :key="i" class="text2">{{ i.name }}</span>
-
-                    <div class="productArea"></div>
+    <div class="home-category">
+        <div class="cover"></div>
+        <ul class="menu">
+            <li v-for="item in categoryStore.categoryList" :key="item.id">
+                <RouterLink class="linkItem" to="/">{{ item.name }}</RouterLink>
+                <RouterLink class="linkItem" v-for="i in item.children.slice(0, 2)" :key="i" to="/">{{ i.name }}
+                </RouterLink>
+                <!-- 弹层layer位置 -->
+                <div class="layer">
+                    <h4>分類推薦 <small>根據您的購買或瀏覽紀錄推薦</small></h4>
+                    <ul>
+                        <li v-for="i in item.goods" :key="i.id">
+                            <RouterLink to="/">
+                                <img :src="i.picture" alt="" />
+                                <div class="info">
+                                    <p class="name ellipsis-2">
+                                        {{ i.name }}
+                                    </p>
+                                    <p class="desc ellipsis">{{ i.desc }}</p>
+                                    <p class="price"><i>¥</i>{{ i.price }}</p>
+                                </div>
+                            </RouterLink>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <!-- <div class="main">
-                <div class="mainText">
-                    <span class="text1">分類推薦</span>
-                    <span class="text2">根據您的購買或瀏覽紀錄推薦</span>
-                </div>
-                <div class="outsideArea"> -->
-            <!-- <div class="square" v-for="i in item.goods" :key="i.id">
-                    <img src="i.picture" alt="">
-                    <div class="info">
-                        <p class="name">
-                            {{i.name}}
-                        </p>
-                        <p class="desc">{{i.desc}}</p>
-                        <p class="price"><i>¥</i>{{i.price}}</p>
-                    </div>
-                </div> -->
-            <!-- </div>
-            </div> -->
-
-        </div>
-
+            </li>
+        </ul>
     </div>
 </template>
 
-<style lang="scss" scoped>
-.bgArea {
-    height: 400px;
-    background-color: #eff5f1;
-    display: flex;
-    justify-content: center;
+<style scoped lang='scss'>
+.home-category {
+    width: 280px;
+    height: 500px;
+    background: #304539;
+    position: relative;
+    z-index: 99;
 
-    .outSide {
-        width: 1000px;
-        height: 400px;
-        background-color: #304539;
-        // display: flex;
-        // flex-direction: column;
-        color: #ffffff;
-
-        .menu {
-            height: 44.5px;
-            padding-top: 7px;
-            position: relative;
-
-            &:hover {
-                cursor: pointer;
-                width: 230px;
-                height: 44.5px;
-                background-color: #688d78;
-            }
-
-            .text1 {
-                font-size: 12pt;
-                margin-left: 25px;
-            }
-
-            .text2 {
-                margin-left: 10px;
-                font-size: 10pt;
-            }
-
-            // .productArea {
-            //     width: 100px;
-            //     height: 70px;
-            //     background-color: #f5d3d3;
-            // }
-        }
-
-        // .main {
-        //     width: 500px;
-        //     height: 300px;
-        //     background-color: #d76161;
-        // }
-
+    .cover {
+        width: 30px;
+        height: 500px;
+        background-color: #ffffff;
+        position: absolute;
+        left: 0;
     }
 
-    // .main {
-    //     width: 770px;
-    //     height: 400px;
-    //     // background-color: #afbae1;
-    //     display: flex;
-    //     flex-direction: column;
-    //     align-items: center;
-    //     justify-content: center;
-    //     margin-left: 10px;
+    .menu {
 
-    //     .mainText {
-    //         display: flex;
-    //         align-items: center;
+        li {
+            padding-left: 20px;
+            height: 55px;
+            line-height: 55px;
+            // list-style:none;
 
-    //         .text1 {
-    //             font-weight: 700;
-    //             font-size: 12pt;
-    //             color: #304539;
-    //             margin-right: 5px;
-    //         }
+            &:hover {
+                background: #84978d;
+            }
 
-    //         .text2 {
-    //             font-weight: 700;
-    //             font-size: 10pt;
-    //             color: #6a6d6c;
-    //         }
+            a {
+                margin-right: 4px;
+                color: #fff;
 
-    //     }
+                // &:first-child {
+                //     font-size: 16px;
+                // }
+            }
 
-    //     .outsideArea {
-    //         width: 770px;
-    //         height: 350px;
-    //         // background-color: #df7ba1;
-    //         display: flex;
-    //         justify-content: center;
-    //         flex-wrap: wrap;
-    //         margin-top: 5px;
+            .linkItem {
+                text-decoration: none;
+            }
 
-    //         .square {
-    //             width: 240px;
-    //             height: 100px;
-    //             background-color: #fff;
-    //             border-radius: 10px;
-    //             border: 2px solid #97a99f;
-    //             margin: 5px;
-    //             display: flex;
-    //             justify-content: center;
-    //             align-items: center;
+            .layer {
+                width: 1000px;
+                height: 500px;
+                background: #ffffff;
+                position: absolute;
+                left: 280px;
+                top: 0;
+                display: none;
 
-    //             img {
-    //                 width: 80px;
-    //                 height: 80px;
-    //             }
+                h4 {
+                    font-size: 20px;
+                    font-weight: normal;
+                    line-height: 80px;
+                    margin-left: 50px;
 
-    //         }
-    //     }
-    // }
+                    small {
+                        font-size: 16px;
+                        color: #666;
+                    }
+                }
+
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    list-style: none;
+
+                    li {
+                        width: 280px;
+                        height: 120px;
+                        padding-left: 0;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                        border: 1px solid #a8b7af;
+                        border-radius: 4px;
+                        background: #fff;
+
+                        &:nth-child(3n) {
+                            margin-right: 0;
+                        }
+
+                        a {
+                            display: flex;
+                            width: 100%;
+                            height: 100%;
+                            align-items: center;
+                            justify-content: center;
+                            text-decoration: none;
+                            // padding: 10px;
+
+                            &:hover {                                
+                                background: #e7eeea;
+                            }
+
+                            img {
+                                width: 100px;
+                                height: 100px;
+                                margin-left: 10px;
+                            }
+
+                            .info {
+                                padding: 10px 10px 0 10px;
+                                line-height: 14px;
+                                overflow: hidden;
+
+                                .name {
+                                    font-size: 14px;
+                                    color: #666;
+                                }
+
+                                .desc {
+                                    font-size: 12px;
+                                    color: #999;
+                                }
+
+                                .price {
+                                    font-size: 14px;
+                                    color: #666;
+
+                                    i {
+                                        font-size: 12px;
+                                        margin-right: 5px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 关键样式  hover状态下的layer盒子变成block
+            &:hover {
+                .layer {
+                    display: block;
+                }
+            }
+        }
+    }
 }
 </style>
