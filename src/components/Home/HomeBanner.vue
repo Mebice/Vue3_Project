@@ -6,7 +6,7 @@ const bannerList = ref([])
 
 const getBanner = async () => {
     const res = await getBannerAPI()
-    console.log(res)
+    console.log("Banner輪播圖",res)
     bannerList.value = res.result
 }
 
@@ -31,7 +31,7 @@ onMounted( () => getBanner() )
 
 <style scoped lang='scss'>
 .home-banner {
-    width: 900px;
+    width: 950px;
     height: 500px;
     position: absolute;
     left: 280px;

@@ -47,7 +47,7 @@ const categoryStore = useCategoryStore()
     .cover {
         width: 30px;
         height: 500px;
-        background-color: #ffffff;
+        background-color: #e7e7e7;
         position: absolute;
         left: 0;
     }
@@ -80,7 +80,7 @@ const categoryStore = useCategoryStore()
             .layer {
                 width: 1000px;
                 height: 500px;
-                background: #ffffff;
+                background: #e7e7e7;
                 position: absolute;
                 left: 280px;
                 top: 0;

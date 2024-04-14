@@ -9,7 +9,7 @@ export const useCategoryStore = defineStore('category', () => {
     // action : 獲取header列表數據的方法
     const getCategory = async () => {
     const res = await getCategoryAPI()
-    console.log(res)
+    console.log("分類",res)
     categoryList.value = res.result
     }
 

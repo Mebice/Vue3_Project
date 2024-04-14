@@ -29,7 +29,7 @@ onMounted(() => categoryStore.getCategory())
     <HomeBanner />
     <HomeNew />
     <HomeHot />
-    <homeProduct />
+    <HomeProduct />
 
     <LayoutFooter />
 </template>
