@@ -1,11 +1,14 @@
 import './assets/main.scss'
-import 'bootstrap'
+import "../node_modules/bootstrap"
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+
+// 引入懶加載指令插件並註冊
+import { lazyPlugin } from '@/directives/index'
 
 // 測試接口函數
 // import { getCategory } from '@/apis/testAPI'
@@ -17,5 +20,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(lazyPlugin)
 
 app.mount('#app')
+
