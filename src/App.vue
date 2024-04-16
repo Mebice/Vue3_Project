@@ -6,8 +6,9 @@ import Header from './components/Header.vue';
 
 <template>
     <!-- <Header /> -->
-
-    <RouterView />
+    
+<!-- 一級路由 -->
+    <RouterView />  
 
 </template>
 

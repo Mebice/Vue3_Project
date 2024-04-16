@@ -14,7 +14,7 @@ const categoryStore = useCategoryStore()
         <img src="/logo.png" alt="">
         <RouterLink class="link" to="/">首頁</RouterLink>
         <div class="routerItem" v-for="item in categoryStore.categoryList" :key="item.id">
-            <RouterLink class="link" to="/">{{ item.name }}</RouterLink>
+            <RouterLink class="link" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </div>
         <div class="searchArea">
             <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
