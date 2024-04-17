@@ -3,7 +3,13 @@ import LayoutNav from '@/components/Layout/LayoutNav.vue'
 import LayoutHeader from '@/components/Layout/LayoutHeader.vue'
 import LayoutFooter from '@/components/Layout/LayoutFooter.vue'
 import LayoutFixed from '@/components/Layout/LayoutFixed.vue'
+// 觸發獲取header數據列表的 action   // 要寫在首頁才可以都觸發到
+import { useCategoryStore } from '@/stores/category'
+import { onMounted  } from 'vue'
 
+const categoryStore = useCategoryStore()
+
+onMounted(() => categoryStore.getCategory())
 </script>
 
 <template>

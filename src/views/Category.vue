@@ -1,16 +1,16 @@
 <script setup>
 import { getTopCategoryAPI } from '@/apis/category'
-import { ref , onMounted } from 'vue'
+import { ref , onMounted,onUpdated } from 'vue'
 import { useRoute } from 'vue-router'
 
 const categoryData = ref({})
 const route = useRoute()
 const getCategory = async() => {
-    const res = await getTopCategoryAPI(route.parms.id)
+    const res = await getTopCategoryAPI(route.params.id)
     categoryData.value = res.result
 }
-
-onMounted(()=>getCategory())
+onMounted(() => getCategory())
+onUpdated(()=>getCategory())
 </script>
 
 <template>
