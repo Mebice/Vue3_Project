@@ -9,7 +9,7 @@ const categoryStore = useCategoryStore()
 <template>
     <div class="bgArea">
         <img src="/logo.png" alt="">
-        <RouterLink class="link" to="/">首頁</RouterLink>
+        <RouterLink class="link" exact-active-class="active" to="/">首頁</RouterLink>
         <div class="rounterItem" v-for="item in categoryStore.categoryList" :key="item.id">
             <RouterLink class="link"  active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </div>
