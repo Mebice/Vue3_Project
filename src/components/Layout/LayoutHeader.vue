@@ -9,9 +9,9 @@ const categoryStore = useCategoryStore()
 <template>
     <div class="bgArea">
         <img src="/logo.png" alt="">
-        <router-link class="link active" to="/">首頁</router-link>
+        <RouterLink class="link" to="/">首頁</RouterLink>
         <div class="rounterItem" v-for="item in categoryStore.categoryList" :key="item.id">
-            <RouterLink class="link" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+            <RouterLink class="link"  active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </div>
         <div class="searchArea">
             <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
