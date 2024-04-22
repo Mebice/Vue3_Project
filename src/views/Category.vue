@@ -1,36 +1,16 @@
 <script setup>
-import { getTopCategoryAPI } from '@/apis/category'
-import { ref, onMounted, onUpdated } from 'vue'
-import { useRoute } from 'vue-router'
-import { getBannerAPI } from '@/apis/home'
 import GoodsItem from '@/components/Home/GoodsItem.vue'
+import { useBanner } from '@/composables/Category/useBanner'
+import { useCategory } from '@/composables/Category/useCategory'
 
-const categoryData = ref({})
-const route = useRoute()
-const getCategory = async () => {
-    const res = await getTopCategoryAPI(route.params.id)
-    categoryData.value = res.result
-}
-
-const bannerList = ref([])
-const getBanner = async () => {
-    const res = await getBannerAPI({
-        distributionSite: '2'
-    })
-    console.log("Banner輪播圖", res)
-    bannerList.value = res.result
-}
-
-onMounted(() => getBanner())
-
-onMounted(() => getCategory())
-// onUpdated(()=>getCategory())
+const { bannerList} = useBanner()
+const { categoryData } = useCategory()
 </script>
 
 <template>
     <div class="top-category">
         <div class="container m-top-20">
-            <!-- 面包屑 -->
+            <!-- 面包屑 -->  
             <div class="bread-container">
                 <el-breadcrumb separator=">">
                     <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -49,7 +29,7 @@ onMounted(() => getCategory())
                 <h3>全部分类</h3>
                 <ul>
                     <li v-for="i in categoryData.children" :key="i.id">
-                        <RouterLink to="/">
+                        <RouterLink :to="`/category/sub/${i.id}`">
                             <img :src="i.picture" />
                             <p>{{ i.name }}</p>
                         </RouterLink>
