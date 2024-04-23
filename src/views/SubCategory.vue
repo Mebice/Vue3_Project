@@ -1,6 +1,31 @@
 <script setup>
+import { getCategoryFilterAPI, getSubCategoryAPI } from '@/apis/category'
+import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import GoodsItem from '@/components/Home/GoodsItem.vue';
+// 獲取麵包屑導航數據
+const categotyData = ref({})
+const route = useRoute()
+const getCategotyData = async () => {
+    const res = await getCategoryFilterAPI(route.params.id)
+    categotyData.value = res.result
+}
+onMounted(() => getCategotyData())
 
-
+// 獲取基礎列表數據渲染
+const goodList = ref([])
+const reqData = ref({
+    categoryId: route.params.id,
+    page: 1,
+    pageSize: 20,
+    sortField: 'publishTime'
+})
+const getGoodList = async () => {
+    const res = await getSubCategoryAPI(reqData.value)
+    console.log('基礎列表',res)
+    goodList.value = res.result.items
+}
+onMounted(() => getGoodList())
 </script>
 
 <template>
@@ -9,9 +34,9 @@
         <div class="bread-container">
             <el-breadcrumb separator=">">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/' }">居家
+                <el-breadcrumb-item :to="{ path: `/category/${categotyData.parentId}` }">{{ categotyData.parentName }}
                 </el-breadcrumb-item>
-                <el-breadcrumb-item>居家生活用品</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ categotyData.name }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="sub-container">
@@ -22,6 +47,7 @@
             </el-tabs>
             <div class="body">
                 <!-- 商品列表-->
+                <GoodsItem v-for="goods in goodList" :goods="goods" :key="goods.id" />
             </div>
         </div>
     </div>
