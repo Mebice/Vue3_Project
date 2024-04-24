@@ -35,12 +35,17 @@ const tabChange = () => {
 }
 
 // 加載更多
+const disabled = ref(false)
 const load = async() => {
     console.log('加載更多數據了')
     // 獲取下一頁數據
     reqData.value.page++
     const res = await getSubCategoryAPI(reqData.value)
     goodList.value = [...goodList.value , ...res.result.items]
+    // 加載完畢 停止監聽
+    if(res.result.items.length === 0){
+        disabled.value = true
+    }
 }
 </script>
 
@@ -61,7 +66,7 @@ const load = async() => {
                 <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
                 <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
             </el-tabs>
-            <div class="body" v-infinite-scroll="load">
+            <div class="body" v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
                 <!-- 商品列表-->
                 <GoodsItem v-for="goods in goodList" :goods="goods" :key="goods.id" />
             </div>
