@@ -1,4 +1,5 @@
 <script setup>
+import DetailHot from '@/components/Detail/DetailHot.vue'
 import { getDetail } from '@/apis/detail'
 import { useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
@@ -66,7 +67,7 @@ onMounted(() => getGoods())
                             </ul>
                         </div>
                         <div class="spec">
-                            <!-- 商品信息区 -->
+                            <!-- 商品信息區 -->
                             <p class="g-name">{{ goods.name }}</p>
                             <p class="g-desc">{{ goods.desc }}</p>
                             <p class="g-price">
@@ -76,14 +77,14 @@ onMounted(() => getGoods())
                             <div class="g-service">
                                 <dl>
                                     <dt>促销</dt>
-                                    <dd>12月好物放送，App领券购买直降120元</dd>
+                                    <dd>12月好物放送，App领券購買直降120元</dd>
                                 </dl>
                                 <dl>
                                     <dt>服务</dt>
                                     <dd>
-                                        <span>无忧退货</span>
+                                        <span>無憂退货</span>
                                         <span>快速退款</span>
-                                        <span>免费包邮</span>
+                                        <span>免費包郵</span>
                                         <a href="javascript:;">了解详情</a>
                                     </dd>
                                 </dl>
@@ -123,7 +124,10 @@ onMounted(() => getGoods())
                         </div>
                         <!-- 24热榜+专题推荐 -->
                         <div class="goods-aside">
-
+                            <!-- 24小時 榜單 -->
+                            <DetailHot  :hotPros-type="1" />
+                            <!-- 周 榜單 -->
+                            <DetailHot :hotPros-type="2" />
                         </div>
                     </div>
                 </div>
