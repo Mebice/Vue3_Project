@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 // 图片列表
 const imageList = [
     "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
@@ -7,6 +8,12 @@ const imageList = [
     "https://yanxuan-item.nosdn.127.net/f93243224dc37674dfca5874fe089c60.jpg",
     "https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg"
 ]
+
+// 1.小圖切換大圖顯示
+const activeIndex = ref(0)
+const enterhandler = (i) => {
+    activeIndex.value = i
+}
 </script>
 
 
@@ -14,13 +21,13 @@ const imageList = [
     <div class="goods-image">
         <!-- 左側大圖-->
         <div class="middle" ref="target">
-            <img :src="imageList[0]" alt="" />
+            <img :src="imageList[activeIndex]" alt="" />
             <!-- 蒙層小滑塊 -->
             <div class="layer" :style="{ left: `0px`, top: `0px` }"></div>
         </div>
-        <!-- 小圖列表 -->
+        <!-- 小圖列表 -->  
         <ul class="small">
-            <li v-for="(img, i) in imageList" :key="i">
+            <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{ active : i ===activeIndex}">
                 <img :src="img" alt="" />
             </li>
         </ul>
@@ -43,9 +50,11 @@ const imageList = [
     display: flex;
 
     .middle {
-        width: 400px;
-        height: 400px;
-        background: #f5f5f5;
+        img {
+            width: 400px;
+            height: 400px;
+            background: #f5f5f5;
+        }
     }
 
     .large {
@@ -66,7 +75,7 @@ const imageList = [
         width: 200px;
         height: 200px;
         background: rgba(0, 0, 0, 0.2);
-        // 绝对定位 然后跟随咱们鼠标控制left和top属性就可以让滑块移动起来
+        // 绝对定位 然后跟随鼠标控制left和top属性就可以让滑块移动起来
         left: 0;
         top: 0;
         position: absolute;
@@ -76,17 +85,22 @@ const imageList = [
         width: 80px;
 
         li {
-            width: 68px;
-            height: 68px;
-            margin-left: 12px;
-            margin-bottom: 15px;
-            cursor: pointer;
+            list-style: none;
+            img {
+                width: 68px;
+                height: 68px;
+                margin-left: 12px;
+                margin-bottom: 15px;
+                cursor: pointer;
 
-            &:hover,
-            &.active {
-                border: 2px solid #5b2121;
+                &:hover,
+                &.active {
+                    border: 2px solid #5b2121;
+                }
             }
         }
     }
+
+
 }
 </style>
