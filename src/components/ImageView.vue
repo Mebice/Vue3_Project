@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { useMouseInElement } from '@vueuse/core';
 // 图片列表
 const imageList = [
     "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
@@ -14,10 +15,15 @@ const activeIndex = ref(0)
 const enterhandler = (i) => {
     activeIndex.value = i
 }
+
+// 2.獲取鼠標相對位置
+const target = ref(null)
+const { elementX,elementY,isOutside } = useMouseInElement(target)
 </script>
 
 
 <template>
+    {{elementX}},{{elementY}},{{isOutside}}
     <div class="goods-image">
         <!-- 左側大圖-->
         <div class="middle" ref="target">
