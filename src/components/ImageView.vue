@@ -36,7 +36,7 @@ const { elementX,elementY,isOutside } = useMouseInElement(target)
             <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{ active : i ===activeIndex}">
                 <img :src="img" alt="" />
             </li>
-        </ul>
+        </ul> 
         <!-- 放大鏡大圖 -->
         <div class="large" :style="[
             {
