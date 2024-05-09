@@ -1,5 +1,26 @@
 <script setup>
 
+// 表單校驗 (帳號名+密碼)
+
+import { ref } from 'vue';
+
+// 1.準備表單對象
+const form = ref({
+  account:'',
+  password:''
+})
+
+// 2.準備規則對象
+const rules = {
+  account:[
+    { required: true, message: '用戶名不能為空', trigger: 'blur' }
+  ],
+  password:[
+  { required: true, message: '密碼不能為空', trigger: 'blur' },
+  { min:6, max: 14, message: '密碼長度為6~14個', trigger: 'blur' }
+
+  ]
+}
 </script>
 
 
@@ -13,8 +34,6 @@
         <RouterLink class="entry" to="/">
           进入网站首页
           <i class="fa-solid fa-angles-right"></i>
-          <!-- <i class="iconfont icon-angle-right"></i>
-          <i class="iconfont icon-angle-right"></i> -->
         </RouterLink>
       </div>
     </header>
@@ -25,12 +44,12 @@
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form label-position="right" label-width="60px" status-icon>
-              <el-form-item label="账户">
-                <el-input />
+            <el-form :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+              <el-form-item prop="account" label="账户">
+                <el-input v-model="form.account" />
               </el-form-item>
-              <el-form-item label="密码">
-                <el-input />
+              <el-form-item prop="password" label="密码">
+                <el-input v-model="form.password" />
               </el-form-item>
               <el-form-item label-width="22px">
                 <el-checkbox size="large">
