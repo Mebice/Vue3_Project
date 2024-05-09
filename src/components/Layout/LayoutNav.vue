@@ -1,12 +1,25 @@
 <template>
     <div class="navArea">
         <div class="nav">
-            <!-- <span>請先登入 | 幫助中心 | 關於我們</span> -->
-            <span>請先登入</span>
-            <span>l</span>
-            <span>幫助中心</span>
-            <span>l</span>
-            <span>關於我們</span>
+            <!-- 多模板渲染 區分登入狀態和非登入狀態 -->
+            <template v-if="false">
+                    <a href="javascript:;"><i class="fa-regular fa-circle-user"></i>葉大雄</a>
+                    
+                        <el-popconfirm title="确认退出吗?" confirm-button-text="确认"
+                            cancel-button-text="取消">
+                            <template #reference>
+                                <a href="javascript:;">退出登录</a>
+                            </template>
+                        </el-popconfirm>
+                    
+                    <a href="javascript:;">我的订单</a>
+                    <a class="lia" href="javascript:;">会员中心</a>
+                </template>
+                <template v-else>
+                    <a href="javascript:;" @click="$router.push('/Login')">请先登录</a>
+                    <a href="javascript:;">帮助中心</a>
+                    <a class="lia" href="javascript:;">关于我们</a>
+                </template>
         </div>
     </div>
 </template>
@@ -19,17 +32,26 @@
     align-items: center;
     justify-content: end;
 
-    .nav{
-        width: 300px;
-        height: 30px;
-        // background-color: #922c2c;
+    .nav {
         justify-content: space-around;
-        padding-right: 50px;
-        padding-top: 3px;
-    }
+        margin-right: 50px;
 
-    span {
-        color: #ffffff;
+        a{
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0 10px;
+            border-right: 1px solid #c0c0c0;
+            line-height: 1; // 行高
+
+        }
+        .lia{
+            padding: 0 10px;
+            border-right: 1px solid #304539;
+            line-height: 1; // 行高
+        }
+        i{
+            margin-right: 5px;
+        }
     }
 
 }
