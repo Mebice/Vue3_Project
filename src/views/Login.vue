@@ -35,6 +35,24 @@ const rules = {
     }
   ]
 }
+
+// 獲取form實例做統一校驗
+const formRef = ref(null)
+const goLogin = () => {
+  // 調用實例方法
+  formRef.value.validate((valid) => {
+    // valid: 所有表單都通過校驗 才為 true
+    console.log(valid)
+    // 以valid作為判斷條件 如果通過校驗才執行登入邏輯
+    if(valid) {
+      // to go Login
+    }
+  })
+}
+
+// 1.用戶名和密碼 只需要通過簡單的配置 (看文檔的方式 - 複雜功能通過多個不同組件拆解)
+// 2.同意協議 自定義規則 validator:(rule,value,callback)=>{}
+// 3.統一校驗 通過調用form實例的方法 validate -> true
 </script>
 
 
@@ -58,7 +76,7 @@ const rules = {
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+            <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
               <el-form-item prop="account" label="账户">
                 <el-input v-model="form.account" />
               </el-form-item>
@@ -70,7 +88,7 @@ const rules = {
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="goLogin">点击登录</el-button>
             </el-form>
           </div>
         </div>
