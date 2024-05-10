@@ -3,6 +3,10 @@
 // 表單校驗 (帳號名+密碼)
 
 import { ref } from 'vue';
+import { loginAPI } from '@/apis/user'
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+import { useRouter } from 'vue-router';
 
 // 1.準備表單對象
 const form = ref({
@@ -38,14 +42,21 @@ const rules = {
 
 // 獲取form實例做統一校驗
 const formRef = ref(null)
+const router = useRouter()
 const goLogin = () => {
+  const { account, password } = form.value
   // 調用實例方法
-  formRef.value.validate((valid) => {
+  formRef.value.validate(async(valid) => {
     // valid: 所有表單都通過校驗 才為 true
     console.log(valid)
     // 以valid作為判斷條件 如果通過校驗才執行登入邏輯
     if(valid) {
-      // to go Login
+      const res = await loginAPI({ account, password })
+      console.log(res)
+      // 1.提示用戶
+      ElMessage({ type: 'success', message: '登入成功' })
+      // 2.跳轉首頁
+      router.replace({ path: '/' })
     }
   })
 }

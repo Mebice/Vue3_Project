@@ -3,23 +3,22 @@
         <div class="nav">
             <!-- 多模板渲染 區分登入狀態和非登入狀態 -->
             <template v-if="false">
-                    <a href="javascript:;"><i class="fa-regular fa-circle-user"></i>葉大雄</a>
-                    
-                        <el-popconfirm title="确认退出吗?" confirm-button-text="确认"
-                            cancel-button-text="取消">
-                            <template #reference>
-                                <a href="javascript:;">退出登录</a>
-                            </template>
-                        </el-popconfirm>
-                    
-                    <a href="javascript:;">我的订单</a>
-                    <a class="lia" href="javascript:;">会员中心</a>
-                </template>
-                <template v-else>
-                    <a href="javascript:;" @click="$router.push('/Login')">请先登录</a>
-                    <a href="javascript:;">帮助中心</a>
-                    <a class="lia" href="javascript:;">关于我们</a>
-                </template>
+                <a href="javascript:;"><i class="fa-regular fa-circle-user"></i>葉大雄</a>
+
+                <el-popconfirm title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
+                    <template #reference>
+                        <a href="javascript:;">退出登录</a>
+                    </template>
+                </el-popconfirm>
+
+                <a href="javascript:;">我的订单</a>
+                <a class="lia" href="javascript:;">会员中心</a>
+            </template>
+            <template v-else>
+                <a href="javascript:;" @click="$router.push('/Login')">请先登录</a>
+                <a href="javascript:;">帮助中心</a>
+                <a class="lia" href="javascript:;">关于我们</a>
+            </template>
         </div>
     </div>
 </template>
@@ -36,7 +35,7 @@
         justify-content: space-around;
         margin-right: 50px;
 
-        a{
+        a {
             color: #ffffff;
             text-decoration: none;
             padding: 0 10px;
@@ -44,12 +43,14 @@
             line-height: 1; // 行高
 
         }
-        .lia{
+
+        .lia {
             padding: 0 10px;
             border-right: 1px solid #304539;
             line-height: 1; // 行高
         }
-        i{
+
+        i {
             margin-right: 5px;
         }
     }
