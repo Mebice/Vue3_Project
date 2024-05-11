@@ -3,10 +3,13 @@
 // 表單校驗 (帳號名+密碼)
 
 import { ref } from 'vue';
-import { loginAPI } from '@/apis/user'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useRouter } from 'vue-router';
+
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
 
 // 1.準備表單對象
 const form = ref({
@@ -51,8 +54,7 @@ const goLogin = () => {
     console.log(valid)
     // 以valid作為判斷條件 如果通過校驗才執行登入邏輯
     if(valid) {
-      const res = await loginAPI({ account, password })
-      console.log(res)
+      await userStore.getUserInfo({ account, password })
       // 1.提示用戶
       ElMessage({ type: 'success', message: '登入成功' })
       // 2.跳轉首頁
