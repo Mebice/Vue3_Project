@@ -1,9 +1,17 @@
+<script setup>
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+
+</script>
+
 <template>
     <div class="navArea">
         <div class="nav">
             <!-- 多模板渲染 區分登入狀態和非登入狀態 -->
-            <template v-if="false">
-                <a href="javascript:;"><i class="fa-regular fa-circle-user"></i>葉大雄</a>
+            <!-- 登入時為第一個模板 登出時為第二個模板 判斷方式: 是否有token -->
+            <template v-if="userStore.userInfo.token">
+                <a href="javascript:;"><i class="fa-regular fa-circle-user"></i>{{ userStore.userInfo.account }}</a>
 
                 <el-popconfirm title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
                     <template #reference>
