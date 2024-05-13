@@ -1,6 +1,7 @@
 //axios基礎的封装
 import axios from 'axios'
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 
@@ -13,9 +14,9 @@ timeout:5000
 
 // axiosi請求攔截器
 httpInstance.interceptors.request.use(config =>{
-    // 從pinia獲取token數據
+    // 1.從pinia獲取token數據
     const userStore = useUserStore()
-    // 按照後端要求拼接token數據
+    // 2.按照後端要求拼接token數據
     const token = userStore.userInfo.token
     if(token){
         config.headers.Authorization = `Bearer ${token}`
@@ -25,11 +26,20 @@ httpInstance.interceptors.request.use(config =>{
 
 // axios響應式攔截器
 httpInstance.interceptors.response.use(res => res.data, e => {
+    const userStore = useUserStore()
+
     // 統一錯誤提示
     ElMessage({
         type: 'warning',
         message: e.response.data.message
     })
+    // 401token失效處理
+    // 1.清除本地用戶數據
+    // 2.跳轉到登入頁
+    if(e.response.status === 401){
+        userStore.clearUserInfo()
+        router.push('/Login')
+    }
     return Promise.reject(e)
     })
     
