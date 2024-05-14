@@ -1,4 +1,5 @@
 <script setup>
+import HeaderCart from './HeaderCart.vue';
 import { useCategoryStore } from '@/stores/category'
 
 // 使用 pinna 管理
@@ -17,7 +18,8 @@ const categoryStore = useCategoryStore()
             <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
 
         </div>
-        <i class="fa-solid fa-cart-shopping"></i>
+        <!-- <i class="fa-solid fa-cart-shopping"></i> -->
+        <HeaderCart />
     </div>
 </template>
 
