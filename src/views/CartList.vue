@@ -1,6 +1,13 @@
 <script setup>
 import { useCartStore } from '@/stores/cartStore';
 const cartStore = useCartStore()
+
+const singleCheck = (i, selected) => {
+    console.log(i, selected)
+    // store cartList 數組 無法知道誰被選中
+    // 除了selected再加上一個用來篩選的參數 - skuId
+    cartStore.singleCheck(i.skuId, selected)
+}
 </script>
 
 <template>
@@ -24,7 +31,8 @@ const cartStore = useCartStore()
                     <tbody>
                         <tr v-for="i in cartStore.cartList" :key="i.id">
                             <td>
-                                <el-checkbox />
+                                <!-- 單選框 -->
+                                <el-checkbox :model-value="i.selected" @change="(selected) => singleCheck(i, selected)" />
                             </td>
                             <td>
                                 <div class="goods">
@@ -59,7 +67,7 @@ const cartStore = useCartStore()
                         <tr v-if="cartStore.cartList.length === 0">
                             <td colspan="6">
                                 <div class="cart-none">
-                                    <el-empty description="购物车列表为空">
+                                    <el-empty description="購物車列表為空">
                                         <el-button type="primary">随便逛逛</el-button>
                                     </el-empty>
                                 </div>
