@@ -2,11 +2,16 @@
 import { useCartStore } from '@/stores/cartStore';
 const cartStore = useCartStore()
 
+// 單選回調
 const singleCheck = (i, selected) => {
     console.log(i, selected)
     // store cartList 數組 無法知道誰被選中
     // 除了selected再加上一個用來篩選的參數 - skuId
     cartStore.singleCheck(i.skuId, selected)
+}
+
+const allCheck = (selected) => {
+    cartStore.allCheck(selected)
 }
 </script>
 
@@ -18,7 +23,8 @@ const singleCheck = (i, selected) => {
                     <thead>
                         <tr>
                             <th width="120">
-                                <el-checkbox />
+                                <!-- 全選 -->
+                                <el-checkbox :model-value="cartStore.isAll" @change="allCheck" />
                             </th>
                             <th width="400">商品信息</th>
                             <th width="220">单价</th>
