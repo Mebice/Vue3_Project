@@ -2,23 +2,35 @@
 
 import { defineStore } from "pinia";
 import { ref,computed } from "vue";
+import { useUserStore } from "./user";
+import { findNewCartListAPI, insertCartAPI } from "@/apis/cart";
+import { findNewAPI } from "@/apis/home";
 
 export const useCartStore = defineStore('cart', () => {
+    const userStore =useUserStore()
+    const isLogin = computed(() => userStore.userInfo.token)
     // 1.定義state - cartList
     const cartList = ref([])
     // 2.定義action - addCart
-    const addCart = (goods) => {
-        // 添加購物車操作
-        // 已添加過 - count + 1
-        // 沒有添加過 - 直接push
-        // 思路: 通過匹配傳遞過來的商品對象中的skuId能不能在cartList中找到， 找到了就是添加過了
-        const item = cartList.value.find((item) => goods.skuId === item.skuId)
-        if (item) {
-            // 找到了
-            item.count++
+    const addCart = async(goods) => {
+        if(isLogin.value){
+            // 登入後的購物車邏輯
+            await insertCartAPI ({ skuId, count })
+            const res = await findNewCartListAPI()
+            cartList.value = res.result
         } else {
-            // 沒找到
-            cartList.value.push(goods)
+            // 添加購物車操作
+            // 已添加過 - count + 1
+            // 沒有添加過 - 直接push
+            // 思路: 通過匹配傳遞過來的商品對象中的skuId能不能在cartList中找到， 找到了就是添加過了
+            const item = cartList.value.find((item) => goods.skuId === item.skuId)
+            if (item) {
+                // 找到了
+                item.count++
+            } else {
+                // 沒找到
+                cartList.value.push(goods)
+            }
         }
     }
 
@@ -50,6 +62,11 @@ export const useCartStore = defineStore('cart', () => {
     // 2. 總價 所有項的count*price之和
     const allPrice = computed(()=> cartList.value.reduce((a,c) => a + c.count * c.price, 0))
 
+    // 3. 已選擇數量
+    const selectedCount = computed(() => cartList.value.filter(item => item.selected).reduce((a,c) => a + c.count, 0))
+    // 4. 已選擇商品合計
+    const selectedPrice = computed(() => cartList.value.filter(item => item.selected).reduce((a,c) => a + c.count * c.price, 0))
+
     // 是否全選
     const isAll = computed(() => cartList.value.every((item) => item.selected))
 
@@ -58,6 +75,8 @@ export const useCartStore = defineStore('cart', () => {
         allCount,
         allPrice,
         isAll,
+        selectedCount,
+        selectedPrice,
         addCart,
         delCart,
         singleCheck,
