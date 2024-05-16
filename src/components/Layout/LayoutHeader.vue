@@ -1,6 +1,6 @@
 <script setup>
 import HeaderCart from './HeaderCart.vue';
-import { useCategoryStore } from '@/stores/category'
+import { useCategoryStore } from '@/stores/categoryStore'
 
 // 使用 pinna 管理
 const categoryStore = useCategoryStore()
