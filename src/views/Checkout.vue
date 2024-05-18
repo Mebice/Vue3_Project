@@ -1,9 +1,27 @@
 <script setup>
-import { getCheckInfoAPI } from '@/apis/checkout';
+import { getCheckInfoAPI, delAressAPI, addAddressAPI } from '@/apis/checkout';
 import { ref, onMounted } from 'vue';
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
 
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({}) // 地址对象
+const showDialog = ref(false) // 控制切換彈窗打開
+const isDeleting = ref(false); // 删除操作的状态
+const addDialog = ref(false) // 控制新增彈窗打開
+// 新增地址表单
+const form = ref({
+    receiver: '',               // 姓名
+    contact: '00123456789',     // 联系方式
+    provinceCode: '000',        // 省份编码
+    cityCode: '000',            // 城市编码
+    countyCode: '000',          // 地区编码
+    address: '',                // 详细地址
+    postalCode: '000',          // 邮政编码
+    addressTags: '000',         // 地址标签
+    isDefault: 1 ,              // 收货地址是否默认 : 0是, 1不是
+    fullLocation: '000'            // 完整地址
+});
 
 const getCheckInfo = async () => {
     const res = await getCheckInfoAPI()
@@ -13,11 +31,6 @@ const getCheckInfo = async () => {
     const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
     curAddress.value = item
 }
-
-onMounted(() => getCheckInfo())
-
-// 控制彈窗打開
-const showDialog = ref(false)
 
 // 切換地址
 const activeAddress = ref({})
@@ -29,6 +42,60 @@ const confirm = () => {
     showDialog.value = false
     activeAddress.value = {}
 }
+
+// 刪除地址
+const delAress = async (id) => {
+    console.log(id)
+    isDeleting.value = true;
+    // 是否刪除
+    await delAressAPI(id);
+    getCheckInfo(); // 重新获取订单信息，刷新地址列表
+    isDeleting.value = false;
+}
+
+// 新增地址 準備規則對象
+const rules = {
+    receiver: [
+        { required: true, message: '姓名不能為空', trigger: 'blur' }
+    ],
+    contact: [
+        { required: true, message: '電話號碼不能為空', trigger: 'blur' },
+        // { min: 6, max: 14, message: '密碼長度為6~14個', trigger: 'blur' }
+    ],
+    address: [
+        { required: true, message: '地址不能為空', trigger: 'blur' }
+    ]
+}
+
+// 新增地址 獲取form實例做統一校驗
+const formRef = ref(null)
+const onAdd = () => {
+    const { receiver, contact, address } = form.value
+    // // 調用實例方法
+    formRef.value.validate(async (valid) => {
+        // valid: 所有表單都通過校驗 才為 true
+        console.log(valid) // 如果任一項為空 = false
+        // 以valid作為判斷條件 如果通過校驗才執行
+        if (valid === true) {  // 填寫完整
+            await addAddressAPI(form.value)
+            // 提示用戶
+            ElMessage({ type: 'success', message: '新增成功' })
+            addDialog.value = false;
+            getCheckInfo()
+            clearForm()
+        } else {  // 任一項為空
+            // 提示用戶
+            ElMessage({ type: 'warning', message: '請填寫完整' })
+        }
+    })
+}
+
+// 離開彈窗時重置或清空數據
+const clearForm = () => {
+    formRef.value.resetFields(); // 重置表单数据
+}
+
+onMounted(() => getCheckInfo())
 
 </script>
 
@@ -50,7 +117,7 @@ const confirm = () => {
                         </div>
                         <div class="action">
                             <el-button size="large" @click="showDialog = true">切换地址</el-button>
-                            <el-button size="large" @click="addFlag = true">添加地址</el-button>
+                            <el-button size="large" @click="addDialog = true">添加地址</el-button>
                         </div>
                     </div>
                 </div>
@@ -132,22 +199,44 @@ const confirm = () => {
     <!-- 切换地址 -->
     <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
         <div class="addressWrapper">
-            <div class="text item" :class="{ active: activeAddress.id === item.id }" @click="switchAddress(item)" v-for="item in checkInfo.userAddresses" :key="item.id">
+            <div class="text item" :class="{ active: activeAddress.id === item.id }" @click="switchAddress(item)"
+                v-for="item in checkInfo.userAddresses" :key="item.id">
                 <ul>
                     <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
                     <li><span>联系方式：</span>{{ item.contact }}</li>
                     <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
                 </ul>
+                <i class="fa-solid fa-xmark" @click.stop="delAress(item.id)"></i>
             </div>
         </div>
         <template #footer>
             <span class="dialog-footer">
-                <el-button>取消</el-button>
+                <el-button @click="showDialog = false">取消</el-button>
                 <el-button type="primary" @click="confirm">确定</el-button>
             </span>
         </template>
     </el-dialog>
     <!-- 添加地址 -->
+    <el-dialog v-model="addDialog" @close="clearForm" title="新增地址" width="400px" center>
+        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="80px" status-icon>
+            <el-form-item prop="receiver" label="收貨人">
+                <el-input v-model="form.receiver" placeholder="請输入姓名" />
+            </el-form-item>
+            <el-form-item prop="contact" label="聯絡方式">
+                <el-input v-model="form.contact" placeholder="請输入電話號碼" />
+            </el-form-item>
+            <el-form-item prop="address" label="收貨地址">
+                <el-input v-model="form.address" placeholder="請输入地址" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="addDialog = false">取消</el-button>
+                <el-button type="primary" @click="onAdd">確認</el-button>
+            </span>
+        </template>
+    </el-dialog>
+    <!-- 修改地址 -->
 </template>
 
 <style scoped lang="scss">
@@ -354,17 +443,28 @@ const confirm = () => {
         border: 1px solid #f5f5f5;
         margin-bottom: 10px;
         cursor: pointer;
+        position: relative;
 
         &.active,
         &:hover {
-            border-color: #666666;
-            background: lighten(#666666, 50%);
+            border-color: #3c4339;
+            background: #f6f7f6;
         }
 
         >ul {
-            padding: 10px;
-            font-size: 14px;
-            line-height: 30px;
+            list-style: none;
+            // padding: 10px;
+            // font-size: 14px;
+            // line-height: 30px;
+        }
+
+        .fa-xmark {
+            position: absolute;
+            right: 10px;
+
+            &:hover {
+                color: #0095ff;
+            }
         }
     }
 }

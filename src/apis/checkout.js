@@ -6,3 +6,30 @@ export const getCheckInfoAPI = () => {
         url: '/member/order/pre'
     })
 }
+
+// 刪除收貨地址
+export const delAressAPI = (id) => {
+    return request ({
+        url: `/member/address/${id}`,
+        method: 'DELETE'
+    })
+}
+
+// 新增收貨地址
+export const addAddressAPI = (data) => {
+    return request ({
+        url: '/member/address',
+        method: 'POST',
+        data
+    })
+}
+
+// 修改收貨地址
+export const updateAddressAPI = (data) => {
+    return request ({
+        url: '/member/address',
+        method: 'POST',
+        data
+    })
+}
+
