@@ -1,17 +1,18 @@
 <script setup>
 import { getCheckInfoAPI, delAressAPI, addAddressAPI, updateAddressAPI } from '@/apis/checkout';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { ElMessage } from 'element-plus' // 警示框
 import 'element-plus/theme-chalk/el-message.css' // 警示框樣式
 import { Edit, Delete } from '@element-plus/icons-vue' // 圖標
 
-const checkInfo = ref({})  // 订单对象
-const curAddress = ref({}) // 地址对象
-const showDialog = ref(false) // 控制切換彈窗打開
-const isDeleting = ref(false); // 删除操作的状态
-const addDialog = ref(false) // 控制新增彈窗打開
-const updateDialog = ref(false)
-const radio = ref(null)
+const checkInfo = ref({})       // 订单对象
+const curAddress = ref({})      // 地址对象
+const showDialog = ref(false)   // 控制切換彈窗打開
+const isDeleting = ref(false);  // 删除操作的状态
+const addDialog = ref(false)    // 控制新增彈窗打開
+const updateDialog = ref(false) // 控制修改彈窗打開
+const radio = ref(null)         // 是否默認
+
 // 新增地址表单
 const form = ref({
     receiver: '',               // 姓名
@@ -75,7 +76,7 @@ const confirm = async () => {
         curAddress.value = activeAddress.value;
     }
     showDialog.value = false;
-    activeAddress.value = {};
+    // activeAddress.value = {};
     getCheckInfo()
 }
 
@@ -134,7 +135,7 @@ const onUpdateAddress = () => {
             ElMessage({ type: 'success', message: '修改成功' })
             updateDialog.value = false;
             showDialog.value = false
-            activeAddress.value = {}  // 回到未選狀態
+            // activeAddress.value = {}  // 回到未選狀態
             getCheckInfo()
             clearForm()
         } else {
@@ -160,8 +161,19 @@ const clearChoose = () => {
     // radio回到默認值
     const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
     radio.value = defaultAddress ? defaultAddress.id : null;  
-    activeAddress.value = {}; // 重置選中的地址
+    // activeAddress.value = {}; // 重置選中的地址
 }
+
+// 當 切換彈窗 打開時激活默認地址
+// 監聽 showDialog 的變化
+watch(showDialog, (newVal) => {
+    if (newVal) {
+        const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
+        activeAddress.value = defaultAddress;
+        radio.value = defaultAddress.id;
+        // 滾動到表單底部
+    }
+});
 
 onMounted(() => getCheckInfo())
 
@@ -546,7 +558,7 @@ onMounted(() => getCheckInfo())
     align-items: center;
 
     &.item {
-        border: 1px solid #dae4da;
+        border: 1px solid #edefed;
         padding-left: 10px;
         margin-bottom: 10px;
         cursor: pointer;
@@ -555,8 +567,8 @@ onMounted(() => getCheckInfo())
         &.active,
         &:hover {
             // border-color: #d7dfd4;
-            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-            background: #f9faf9;
+            box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); // 偏移 立體感 光暈 顏色深淺
+            background: #f5f5f5;
         }
 
         .chooseDefault {
