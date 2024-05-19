@@ -11,6 +11,7 @@ const showDialog = ref(false) // 控制切換彈窗打開
 const isDeleting = ref(false); // 删除操作的状态
 const addDialog = ref(false) // 控制新增彈窗打開
 const updateDialog = ref(false)
+const radio = ref(null)
 // 新增地址表单
 const form = ref({
     receiver: '',               // 姓名
@@ -21,8 +22,8 @@ const form = ref({
     address: '',                // 详细地址
     postalCode: '000',          // 邮政编码
     addressTags: '000',         // 地址标签
-    isDefault: 1,              // 收货地址是否默认 : 0是, 1不是
-    fullLocation: '000',         // 完整地址
+    isDefault: 1,               // 收货地址是否默认 : 0是, 1不是
+    fullLocation: '000',        // 完整地址
 })
 // 修改地址表單
 const updateForm = ref({
@@ -34,10 +35,11 @@ const updateForm = ref({
     address: '',                // 详细地址
     postalCode: '000',          // 邮政编码
     addressTags: '000',         // 地址标签
-    isDefault: 1,              // 收货地址是否默认 : 0是, 1不是
-    fullLocation: '000',         // 完整地址
+    isDefault: 1,               // 收货地址是否默认 : 0是, 1不是
+    fullLocation: '000',        // 完整地址
 })
 
+// 獲取詳情
 const getCheckInfo = async () => {
     const res = await getCheckInfoAPI()
     checkInfo.value = res.result
@@ -45,22 +47,36 @@ const getCheckInfo = async () => {
     // 從地址列表中渲染出來 isDefault === 0 那一項
     const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
     curAddress.value = item
+    radio.value = item?.id || null
 }
 
 // 切換地址
 const activeAddress = ref({})
 const switchAddress = (item) => {
     activeAddress.value = item
+    radio.value = item?.id || null
 }
-const confirm = () => {
+const confirm = async () => {
     // 如果未選擇任何地址，則使用默認地址
     if (!activeAddress.value.id) {
         curAddress.value = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
-    } else {
+    }
+    // 更新选择的地址为默认地址
+    if (radio.value) {  // activeAddress選擇後將isDefault: 0 默認
+        await updateAddressAPI(activeAddress.value.id, { ...activeAddress.value, isDefault: 0 })
+        // 更新其他地址为非默认地址
+        // for (const address of checkInfo.value.userAddresses) {
+        //     if (address.id !== activeAddress.value.id && address.isDefault === 0) {
+        //         await updateAddressAPI(address.id, { ...address, isDefault: 1 });
+        //     }
+        // }
+    }
+    else {
         curAddress.value = activeAddress.value;
     }
     showDialog.value = false;
     activeAddress.value = {};
+    getCheckInfo()
 }
 
 // 刪除地址
@@ -139,6 +155,14 @@ const clearForm = () => {
     formRef.value.resetFields(); // 重置表单数据
 }
 
+// 離開切換地址彈窗時重置選取的active還有radio回到默認值
+const clearChoose = () => {
+    // radio回到默認值
+    const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
+    radio.value = defaultAddress ? defaultAddress.id : null;  
+    activeAddress.value = {}; // 重置選中的地址
+}
+
 onMounted(() => getCheckInfo())
 
 </script>
@@ -190,7 +214,7 @@ onMounted(() => getCheckInfo())
                                     </a>
                                 </td>
                                 <td>&yen;{{ i.price }}</td>
-                                <td>{{ i.price }}</td>
+                                <td>{{ i.count }}</td>
                                 <td>&yen;{{ i.totalPrice }}</td>
                                 <td>&yen;{{ i.totalPayPrice }}</td>
                             </tr>
@@ -241,10 +265,15 @@ onMounted(() => getCheckInfo())
         </div>
     </div>
     <!-- 切换地址 -->
-    <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
+    <el-dialog v-model="showDialog" @close="clearChoose" title="切换收货地址" width="32%" center>
         <div class="addressWrapper">
             <div class="text item" :class="{ active: activeAddress.id === item.id }" @click="switchAddress(item)"
                 v-for="item in checkInfo.userAddresses" :key="item.id">
+                <!-- 默認地址 -->
+                <el-radio-group v-model="radio" class="chooseDefault">
+                    <el-radio :value="item.id, item" size="large"></el-radio>
+                </el-radio-group>
+
                 <ul>
                     <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
                     <li><span>联系方式：</span>{{ item.contact }}</li>
@@ -301,6 +330,9 @@ onMounted(() => getCheckInfo())
             </el-form-item>
             <el-form-item prop="address" label="收貨地址">
                 <el-input v-model="updateForm.address" placeholder="請输入地址" />
+            </el-form-item>
+            <el-form-item prop="isDefault" label="是否默認">
+                <el-input v-model="updateForm.isDefault" disabled placeholder="請输入0或1" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -514,19 +546,27 @@ onMounted(() => getCheckInfo())
     align-items: center;
 
     &.item {
-        border: 1px solid #f5f5f5;
+        border: 1px solid #dae4da;
+        padding-left: 10px;
         margin-bottom: 10px;
         cursor: pointer;
         position: relative;
 
         &.active,
         &:hover {
-            border-color: #3c4339;
-            background: #f6f7f6;
+            // border-color: #d7dfd4;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+            background: #f9faf9;
+        }
+
+        .chooseDefault {
+            position: absolute;
+            left: 15px;
         }
 
         >ul {
             list-style: none;
+            padding-top: 15px;
             // padding: 10px;
             // font-size: 14px;
             // line-height: 30px;

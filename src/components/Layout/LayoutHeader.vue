@@ -12,12 +12,19 @@ const categoryStore = useCategoryStore()
         <img src="/logo.png" alt="">
         <RouterLink class="link" exact-active-class="active" to="/">首頁</RouterLink>
         <div class="rounterItem" v-for="item in categoryStore.categoryList" :key="item.id">
-            <RouterLink class="link"  active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+            <RouterLink class="link" active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </div>
-        <div class="searchArea">
-            <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
 
+        <div class="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="搜尋">
         </div>
+
+        <!-- <div class="searchArea">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="" id="" placeholder="搜尋"> 
+        </div> -->
+
         <!-- <i class="fa-solid fa-cart-shopping"></i> -->
         <HeaderCart />
     </div>
@@ -55,26 +62,26 @@ const categoryStore = useCategoryStore()
         border-bottom: 1px solid #304539;
     }
 
+    .search {
+        position: relative;
+        border-bottom: 1.5px solid #cfded6;
+        line-height: 32px;
+        margin-left: 30px;
 
-    input {
-        width: 150px;
-        height: 25px;
-        border: white;
-        border-bottom: 2px solid #82998b;
-        padding-left: 5px;
-    }
-
-    .fa-magnifying-glass {
-        font-size: 16pt;
-
-        &:hover {
-            cursor: pointer;
-            color: #9eb3a7;
+        .fa-magnifying-glass {
+            font-size: 18px;
         }
-    }
 
-    .fa-cart-shopping {
-        font-size: 20pt;
+        input {
+            outline: none; // 框框隱藏
+            border: none;
+            padding-bottom: 0;
+            padding-left: 5px;
+
+            &:hover {
+                border: none;
+            }
+        }
     }
 }
 </style>

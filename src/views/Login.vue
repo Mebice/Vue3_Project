@@ -11,6 +11,9 @@ import { useUserStore } from '@/stores/userStore'
 
 const userStore = useUserStore()
 
+// 帳號一: 帳戶: xiaotuxian001 & 密碼: 123456
+// 帳號二: 帳戶: heima282 & 密碼: hm#qd@23!
+
 // 1.準備表單對象
 const form = ref({
   account: '',

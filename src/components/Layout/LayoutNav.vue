@@ -60,6 +60,9 @@ const confirm = () => {
             border-right: 1px solid #c0c0c0;
             line-height: 1; // 行高
 
+            &:hover{
+                color: #bccfc5;
+            }
         }
 
         .lia {
