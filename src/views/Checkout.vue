@@ -11,7 +11,7 @@ const showDialog = ref(false) // 控制切換彈窗打開
 const isDeleting = ref(false); // 删除操作的状态
 const addDialog = ref(false) // 控制新增彈窗打開
 const updateDialog = ref(false)
-// 地址表单
+// 新增地址表单
 const form = ref({
     receiver: '',               // 姓名
     contact: '00123456789',     // 联系方式
@@ -21,7 +21,20 @@ const form = ref({
     address: '',                // 详细地址
     postalCode: '000',          // 邮政编码
     addressTags: '000',         // 地址标签
-    isDefault: 1 ,              // 收货地址是否默认 : 0是, 1不是
+    isDefault: 1,              // 收货地址是否默认 : 0是, 1不是
+    fullLocation: '000',         // 完整地址
+})
+// 修改地址表單
+const updateForm = ref({
+    receiver: '',               // 姓名
+    contact: '00123456789',     // 联系方式
+    provinceCode: '000',        // 省份编码
+    cityCode: '000',            // 城市编码
+    countyCode: '000',          // 地区编码
+    address: '',                // 详细地址
+    postalCode: '000',          // 邮政编码
+    addressTags: '000',         // 地址标签
+    isDefault: 1,              // 收货地址是否默认 : 0是, 1不是
     fullLocation: '000',         // 完整地址
 })
 
@@ -40,9 +53,14 @@ const switchAddress = (item) => {
     activeAddress.value = item
 }
 const confirm = () => {
-    curAddress.value = activeAddress.value
-    showDialog.value = false
-    activeAddress.value = {}
+    // 如果未選擇任何地址，則使用默認地址
+    if (!activeAddress.value.id) {
+        curAddress.value = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
+    } else {
+        curAddress.value = activeAddress.value;
+    }
+    showDialog.value = false;
+    activeAddress.value = {};
 }
 
 // 刪除地址
@@ -95,14 +113,15 @@ const onAddAddress = () => {
 // 修改地址
 const onUpdateAddress = () => {
     formRef.value.validate(async (valid) => {
-        if (valid === true) { 
-            await updateAddressAPI(form.value.id, form.value)
+        if (valid === true) {
+            await updateAddressAPI(updateForm.value.id, updateForm.value)
             ElMessage({ type: 'success', message: '修改成功' })
             updateDialog.value = false;
             showDialog.value = false
+            activeAddress.value = {}  // 回到未選狀態
             getCheckInfo()
             clearForm()
-        } else { 
+        } else {
             ElMessage({ type: 'warning', message: '請填寫完整' })
         }
     })
@@ -111,7 +130,7 @@ const onUpdateAddress = () => {
 // 打開修改地址彈窗並賦值
 const openUpdateDialog = (item) => {
     console.log(item)
-    form.value = { ...item }
+    updateForm.value = { ...item }
     updateDialog.value = true
 }
 
@@ -232,9 +251,11 @@ onMounted(() => getCheckInfo())
                     <li><span>收货地址：</span>{{ item.fullLocation + item.address }}</li>
                 </ul>
                 <!-- 修改按鈕 -->
-                <el-button class="updateAddressBtn" @click="openUpdateDialog(item)" type="primary" :icon="Edit" circle />
+                <el-button class="updateAddressBtn" @click="openUpdateDialog(item)" type="primary" :icon="Edit"
+                    circle />
                 <!-- 刪除按鈕 -->
-                <el-popconfirm @confirm="delAress(item.id)" title="確認刪除嗎?" confirm-button-text="確認" cancel-button-text="取消">
+                <el-popconfirm @confirm="delAress(item.id)" title="確認刪除嗎?" confirm-button-text="確認"
+                    cancel-button-text="取消">
                     <template #reference>
                         <el-button class="delAddressBtn" type="danger" :icon="Delete" circle />
                     </template>
@@ -271,15 +292,15 @@ onMounted(() => getCheckInfo())
     </el-dialog>
     <!-- 修改地址 -->
     <el-dialog v-model="updateDialog" @close="clearForm" title="修改地址" width="400px" center>
-        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="80px" status-icon>
+        <el-form ref="formRef" :model="updateForm" :rules="rules" label-position="right" label-width="80px" status-icon>
             <el-form-item prop="receiver" label="收貨人">
-                <el-input v-model="form.receiver" placeholder="請输入姓名" />
+                <el-input v-model="updateForm.receiver" placeholder="請输入姓名" />
             </el-form-item>
             <el-form-item prop="contact" label="聯絡方式">
-                <el-input v-model="form.contact" placeholder="請输入電話號碼" />
+                <el-input v-model="updateForm.contact" placeholder="請输入電話號碼" />
             </el-form-item>
             <el-form-item prop="address" label="收貨地址">
-                <el-input v-model="form.address" placeholder="請输入地址" />
+                <el-input v-model="updateForm.address" placeholder="請输入地址" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -511,9 +532,10 @@ onMounted(() => getCheckInfo())
             // line-height: 30px;
         }
 
-        .updateAddressBtn{
+        .updateAddressBtn {
             position: absolute;
             right: 50px;
+
             &:hover {
                 color: #006aff;
             }
