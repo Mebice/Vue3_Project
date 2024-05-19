@@ -25,10 +25,10 @@ export const addAddressAPI = (data) => {
 }
 
 // 修改收貨地址
-export const updateAddressAPI = (data) => {
+export const updateAddressAPI = (id, data) => {
     return request ({
-        url: '/member/address',
-        method: 'POST',
+        url: `/member/address/${id}`,
+        method: 'PUT',
         data
     })
 }
