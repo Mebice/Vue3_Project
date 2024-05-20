@@ -1,12 +1,16 @@
 <script setup>
-import { getCheckInfoAPI, delAressAPI, addAddressAPI, updateAddressAPI } from '@/apis/checkout';
+import { getCheckInfoAPI, delAressAPI, addAddressAPI, updateAddressAPI, createOrderAPI } from '@/apis/checkout';
 import { ref, onMounted, watch } from 'vue';
 import { ElMessage } from 'element-plus' // 警示框
 import 'element-plus/theme-chalk/el-message.css' // 警示框樣式
 import { Edit, Delete } from '@element-plus/icons-vue' // 圖標
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/stores/cartStore';
 
+const cartStore = useCartStore()
+const router = useRouter()
 const checkInfo = ref({})       // 订单对象
-const curAddress = ref({})      // 地址对象
+const curAddress = ref({})      // 默認地址
 const showDialog = ref(false)   // 控制切換彈窗打開
 const isDeleting = ref(false);  // 删除操作的状态
 const addDialog = ref(false)    // 控制新增彈窗打開
@@ -156,14 +160,14 @@ const clearForm = () => {
     formRef.value.resetFields(); // 重置表单数据
 }
 
-// 離開切換地址彈窗時重置選取的active還有radio回到默認值
-const clearChoose = () => {
-    // radio回到默認值
-    const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
-    radio.value = defaultAddress ? defaultAddress.id : null;
-    //   回到默認的激活默認地址
-    // activeAddress.value = defaultAddress || {};  // 如果沒有默認地址，設置為空對象
-}
+//     // 離開切換地址彈窗時重置選取的active還有radio回到默認值
+// const clearChoose = () => {
+//     // radio回到默認值
+//     const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
+//     radio.value = defaultAddress ? defaultAddress.id : null;
+//     //   回到默認的激活默認地址
+//     // activeAddress.value = defaultAddress || {};  // 如果沒有默認地址，設置為空對象
+// }
 
 // 當 切換彈窗 打開時激活默認地址
 // 監聽 showDialog 的變化
@@ -176,6 +180,32 @@ watch(showDialog, (newVal) => {
         }
     }
 })
+
+// 創建訂單
+const createOrder = async() => {
+    const res = await createOrderAPI({
+        deliveryTimeType: 1,
+        payType: 1,
+        payChannel: 1,
+        buyerMessage: '',
+        goods: checkInfo.value.goods.map(item => {
+            return {
+                skuId: item.skuId,
+                count: item.count
+            }
+        }),
+        addressId: curAddress.value.id
+    })
+    const orderId = res.result.id
+    router.push({
+        path: '/pay',
+        query: {
+            id: orderId
+        }
+    })
+    // 更新購物車
+    cartStore.updateNewList()
+}
 
 onMounted(() => getCheckInfo())
 
@@ -273,7 +303,7 @@ onMounted(() => getCheckInfo())
                 </div>
                 <!-- 提交订单 -->
                 <div class="submit">
-                    <el-button type="primary" size="large">提交订单</el-button>
+                    <el-button @click="createOrder" type="primary" size="large">提交订单</el-button>
                 </div>
             </div>
         </div>
@@ -309,7 +339,7 @@ onMounted(() => getCheckInfo())
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">取消</el-button>
-                <el-button color="#61806e" type="primary" @click="confirm">确定</el-button>
+                <el-button type="primary" @click="confirm">确定</el-button>
             </span>
         </template>
     </el-dialog>
@@ -367,6 +397,7 @@ onMounted(() => getCheckInfo())
     .wrapper {
         background: #fff;
         padding: 0 20px;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
 
         .box-title {
             font-size: 16px;

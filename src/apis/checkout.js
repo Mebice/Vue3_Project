@@ -33,3 +33,11 @@ export const updateAddressAPI = (id, data) => {
     })
 }
 
+// 創建訂單
+export const createOrderAPI = (data) => {
+    return request ({
+        url: '/member/order',
+        method: 'POST',
+        data
+    })
+}
