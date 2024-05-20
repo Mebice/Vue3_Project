@@ -47,7 +47,7 @@ const getCheckInfo = async () => {
     // 適配默認地址
     // 從地址列表中渲染出來 isDefault === 0 那一項
     const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
-    curAddress.value = item
+    curAddress.value = item 
     radio.value = item?.id || null
 }
 
@@ -160,8 +160,9 @@ const clearForm = () => {
 const clearChoose = () => {
     // radio回到默認值
     const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
-    radio.value = defaultAddress ? defaultAddress.id : null;  
-    // activeAddress.value = {}; // 重置選中的地址
+    radio.value = defaultAddress ? defaultAddress.id : null;
+    //   回到默認的激活默認地址
+    // activeAddress.value = defaultAddress || {};  // 如果沒有默認地址，設置為空對象
 }
 
 // 當 切換彈窗 打開時激活默認地址
@@ -169,11 +170,12 @@ const clearChoose = () => {
 watch(showDialog, (newVal) => {
     if (newVal) {
         const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
-        activeAddress.value = defaultAddress;
-        radio.value = defaultAddress.id;
-        // 滾動到表單底部
+        if (defaultAddress) {  // 只有當存在默認地址時才進行操作
+            activeAddress.value = defaultAddress;
+            radio.value = defaultAddress.id;
+        }
     }
-});
+})
 
 onMounted(() => getCheckInfo())
 
@@ -307,7 +309,7 @@ onMounted(() => getCheckInfo())
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">取消</el-button>
-                <el-button type="primary" @click="confirm">确定</el-button>
+                <el-button color="#61806e" type="primary" @click="confirm">确定</el-button>
             </span>
         </template>
     </el-dialog>
