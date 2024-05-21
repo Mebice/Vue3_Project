@@ -455,14 +455,14 @@ const toggleImageZoom = () => {
     }
 }
 
-/* 放大图片的样式 */
+/* 放大圖片的樣式 */
 .zoomed-image-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(250, 252, 249, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;

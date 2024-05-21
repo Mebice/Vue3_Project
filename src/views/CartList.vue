@@ -38,7 +38,8 @@ const allCheck = (selected) => {
                         <tr v-for="i in cartStore.cartList" :key="i.id">
                             <td>
                                 <!-- 單選框 -->
-                                <el-checkbox :model-value="i.selected" @change="(selected) => singleCheck(i, selected)" />
+                                <el-checkbox :model-value="i.selected"
+                                    @change="(selected) => singleCheck(i, selected)" />
                             </td>
                             <td>
                                 <div class="goods">
@@ -60,21 +61,19 @@ const allCheck = (selected) => {
                                 <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>
                             </td>
                             <td class="tc">
-                                <p>
-                                    <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消"
-                                        @confirm="delCart(i)">
-                                        <template #reference>
-                                            <a href="javascript:;">删除</a>
-                                        </template>
-                                    </el-popconfirm>
-                                </p>
+                                <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消"
+                                    @confirm="cartStore.delCart(i.skuId)">
+                                    <template #reference>
+                                        <a href="javascript:;">删除</a>
+                                    </template>
+                                </el-popconfirm>
                             </td>
                         </tr>
                         <tr v-if="cartStore.cartList.length === 0">
                             <td colspan="6">
                                 <div class="cart-none">
                                     <el-empty description="購物車列表為空">
-                                        <el-button type="primary">随便逛逛</el-button>
+                                        <el-button type="primary"@click="$router.push('/')">随便逛逛</el-button>
                                     </el-empty>
                                 </div>
                             </td>
@@ -84,7 +83,7 @@ const allCheck = (selected) => {
                 </table>
             </div>
             <!-- 操作欄 -->
-            <div class="action">
+            <div class="action" v-if="cartStore.cartList.length > 0">
                 <div class="batch">
                     共 {{ cartStore.allCount }} 件商品，已選擇 {{ cartStore.selectedCount }} 件，商品合計：
                     <span class="red">¥ {{ cartStore.selectedPrice.toFixed(2) }} </span>
