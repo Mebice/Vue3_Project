@@ -36,12 +36,17 @@ onMounted(() => getHotProsList())
     <div class="goods-hot">
         <h3>{{ title }}</h3>
         <!-- 商品区块 -->
-        <RouterLink to="/" class="goods-item" v-for="item in hotProsList" :key="item.id">
+        <a 
+            v-for="item in hotProsList" 
+            :key="item.id" 
+            :href="`/detail/${item.id}`" 
+            class="goods-item"
+        >
             <img :src="item.picture" alt="" />
             <p class="name ellipsis">{{ item.name }}</p>
             <p class="desc ellipsis">{{ item.desc }}</p>
             <p class="price">&yen;{{ item.price }}</p>
-        </RouterLink>
+        </a>
     </div>
 </template>
 
@@ -55,7 +60,7 @@ onMounted(() => getHotProsList())
         font-size: 18px;
         line-height: 70px;
         padding-left: 25px;
-        margin-bottom: 10px;
+        margin-bottom: 0px;
         font-weight: normal;
     }
 
@@ -69,6 +74,10 @@ onMounted(() => getHotProsList())
         overflow: hidden; //超出隱藏
         white-space: nowrap; //不換行
 
+        &:hover {
+            transform: translate3d(0, -3px, 0);
+            box-shadow: 0 0 3px 4px rgb(0 0 0 / 20%);
+        }
 
         img {
             width: 160px;

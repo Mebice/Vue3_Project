@@ -17,8 +17,8 @@ onMounted(() => getGoods())
 
 // sku規格被操作時
 let skuObj = {}
-const skuChange = (sku) => {
-    console.log(sku)
+const skuChange = (sku, skus) => {
+    console.log(sku, skus)
     skuObj = sku
     // 根据所选的SKU更新价格，隨著選取不同規格大小價錢也可能不一樣
     if (sku.price) {
@@ -27,6 +27,10 @@ const skuChange = (sku) => {
     // 更新商品规格文本
     if (sku.specsText) {
         goods.value.attrsText = sku.specsText;
+    }
+    // 更新商品圖片
+    if (sku.picture) {
+        goods.value.picture = sku.picture;
     }
 }
 
@@ -38,7 +42,7 @@ const countChange = (count) => {
 
 // 添加購物車
 const addCart = () => {
-    if(skuObj.skuId){
+    if (skuObj.skuId) {
         // 規格已選 觸發action
         cartStore.addCart({
             id: goods.value.id, // 商品id
@@ -55,6 +59,13 @@ const addCart = () => {
         ElMessage.warning('請選擇規格')
     }
 }
+
+// 控制图片放大
+const isImageZoomed = ref(false)
+const toggleImageZoom = () => {
+    isImageZoomed.value = !isImageZoomed.value
+}
+
 </script>
 
 <template>
@@ -74,7 +85,7 @@ const addCart = () => {
                     <el-breadcrumb-item :to="{ path: `/category/sub/${goods.categories?.[0].id}` }">{{
                         goods.categories?.[0].name }}
                     </el-breadcrumb-item>
-                    <el-breadcrumb-item>抓绒保暖，毛毛蟲子兒童運動鞋</el-breadcrumb-item>
+                    <el-breadcrumb-item>{{ goods.name }}</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
             <!-- 商品信息 -->
@@ -104,7 +115,7 @@ const addCart = () => {
                                 <li>
                                     <p>品牌信息</p>
                                     <!-- 找不到name可能還來不及找到brand 就渲染了 => 解決:可選鍊?. -->
-                                    <p> {{ goods.brand?.name }} </p> 
+                                    <p> {{ goods.brand?.name }} </p>
                                     <p><i class="iconfont icon-dynamic-filling"></i>品牌主页</p>
                                 </li>
                             </ul>
@@ -118,6 +129,21 @@ const addCart = () => {
                                 <span>{{ goods.price }}</span>
                             </p>
                             <p>{{ goods.attrsText }}</p>
+                            <!-- 點擊商品圖片會放大 -->
+                            <img class="produtPic" :src="goods.picture" @click="toggleImageZoom" alt="商品图片"
+                                height="200px">
+
+                            <!-- sku组件 -->
+                            <XtxSku :goods="goods" @change="skuChange" />
+                            <!-- 数据组件 -->
+                            <el-input-number v-model="count" @change="countChange" min="1" />
+                            <!-- 按钮组件 -->
+                            <div>
+                                <el-button size="large" class="btn" @click="addCart">
+                                    加入购物车
+                                </el-button>
+                            </div>
+
                             <div class="g-service">
                                 <dl>
                                     <dt>促销</dt>
@@ -132,16 +158,6 @@ const addCart = () => {
                                         <a href="javascript:;">了解详情</a>
                                     </dd>
                                 </dl>
-                            </div>
-                            <!-- sku组件 -->
-                            <XtxSku :goods="goods" @change="skuChange" />
-                            <!-- 数据组件 -->
-                            <el-input-number v-model="count" @change="countChange" />
-                            <!-- 按钮组件 -->
-                            <div>
-                                <el-button size="large" class="btn" @click="addCart">
-                                    加入购物车
-                                </el-button>
                             </div>
 
                         </div>
@@ -169,7 +185,7 @@ const addCart = () => {
                         <!-- 24热榜+专题推荐 -->
                         <div class="goods-aside">
                             <!-- 24小時 榜單 -->
-                            <DetailHot  :hotPros-type="1" />
+                            <DetailHot :hotPros-type="1" />
                             <!-- 周 榜單 -->
                             <DetailHot :hotPros-type="2" />
                         </div>
@@ -178,15 +194,23 @@ const addCart = () => {
             </div>
         </div>
     </div>
+    <!-- 放大的图片 -->
+    <div v-if="isImageZoomed" class="zoomed-image-container" @click="toggleImageZoom">
+        <img :src="goods.picture" alt="放大的商品图片" />
+    </div>
 </template>
 
 
 <style scoped lang='scss'>
 .xtx-goods-page {
+    background-color: #f5f5f5;
+
     .goods-info {
         min-height: 600px;
         background: #fff;
         display: flex;
+        padding-left: 30px;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
 
         .media {
             width: 580px;
@@ -211,13 +235,15 @@ const addCart = () => {
 
         .goods-aside {
             width: 280px;
-            min-height: 1000px;
+            height: min-content;
+            box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
         }
     }
 
     .goods-tabs {
         min-height: 600px;
         background: #fff;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
     }
 
     .goods-warn {
@@ -313,7 +339,7 @@ const addCart = () => {
         align-items: center;
         text-align: center;
         height: 140px;
-        list-style:none;
+        list-style: none;
 
         li {
             flex: 1;
@@ -419,5 +445,32 @@ const addCart = () => {
 
 .bread-container {
     padding: 25px 0;
+}
+
+.produtPic {
+    &:hover {
+        transform: translate3d(0, -3px, 0);
+        box-shadow: 0 0 3px 4px rgb(0 0 0 / 20%);
+        cursor: zoom-in; // 放大鏡
+    }
+}
+
+/* 放大图片的样式 */
+.zoomed-image-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.zoomed-image-container img {
+    max-width: 120%;
+    max-height: 120%;
 }
 </style>

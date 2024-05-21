@@ -1,11 +1,11 @@
 <script setup>
-import { ref , watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useMouseInElement } from '@vueuse/core';
 
 // props圖片列表
 defineProps({
-    imageList:{
-        type : Array,
+    imageList: {
+        type: Array,
         default: () => []
     }
 })
@@ -26,36 +26,36 @@ const enterhandler = (i) => {
 
 // 2.獲取鼠標相對位置
 const target = ref(null)
-const { elementX,elementY,isOutside } = useMouseInElement(target)
+const { elementX, elementY, isOutside } = useMouseInElement(target)
 
 // 3.控制滑塊跟隨鼠標移動(監聽elementX/Y變化，一旦變化 重新設置left/top)
 // 滑塊
-const left = ref(0)  
+const left = ref(0)
 const top = ref(0)
 // 大圖
 const positionX = ref(0)
 const positionY = ref(0)
-watch([elementX,elementY,isOutside], () => {
+watch([elementX, elementY, isOutside], () => {
     console.log('xy變化了')
     // 如果鼠標沒有移入到盒子裡面 就不執行後面的邏輯
-    if(isOutside.value) return
+    if (isOutside.value) return
     console.log('後續邏輯執行了')
     // 有效範圍內控制滑塊距離
     // 橫向
-    if(elementX.value > 100 && elementX.value < 300 ){
+    if (elementX.value > 100 && elementX.value < 300) {
         left.value = elementX.value - 100
     }
     // 縱向
-    if(elementY.value > 100 && elementY.value < 300 ){
+    if (elementY.value > 100 && elementY.value < 300) {
         top.value = elementY.value - 100
     }
 
     // 處理邊界
-    if(elementX.value > 300) { left.value = 200 }
-    if(elementX.value < 100) { left.value = 0 }
+    if (elementX.value > 300) { left.value = 200 }
+    if (elementX.value < 100) { left.value = 0 }
 
-    if(elementY.value > 300) { top.value = 200 }
-    if(elementY.value < 100) { top.value = 0 }
+    if (elementY.value > 300) { top.value = 200 }
+    if (elementY.value < 100) { top.value = 0 }
 
     // 控制大圖的顯示
     positionX.value = -left.value * 2
@@ -65,7 +65,7 @@ watch([elementX,elementY,isOutside], () => {
 
 
 <template>
-    {{elementX}},{{elementY}},{{isOutside}}
+    <!-- {{elementX}},{{elementY}},{{isOutside}} -->
     <div class="goods-image">
         <!-- 左側大圖-->
         <div class="middle" ref="target">
@@ -73,12 +73,13 @@ watch([elementX,elementY,isOutside], () => {
             <!-- 蒙層小滑塊 -->
             <div class="layer" v-show="!isOutside" :style="{ left: `${left}px`, top: `${top}px` }"></div>
         </div>
-        <!-- 小圖列表 -->  
+        <!-- 小圖列表 -->
         <ul class="small">
-            <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{ active : i ===activeIndex}">
+            <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)"
+                :class="{ active:i === activeIndex }">
                 <img :src="img" alt="" />
             </li>
-        </ul> 
+        </ul>
         <!-- 放大鏡大圖 -->
         <div class="large" :style="[
             {
@@ -134,6 +135,7 @@ watch([elementX,elementY,isOutside], () => {
 
         li {
             list-style: none;
+
             img {
                 width: 68px;
                 height: 68px;
@@ -143,7 +145,7 @@ watch([elementX,elementY,isOutside], () => {
 
                 &:hover,
                 &.active {
-                    border: 2px solid #5b2121;
+                    border: 2px solid #517850;
                 }
             }
         }

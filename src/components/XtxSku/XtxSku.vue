@@ -129,13 +129,15 @@ export default {
                 // 从路径字典中得到skuId
                 const skuId = pathMap[selectedArr.join(spliter)][0]
                 const sku = props.goods.skus.find(sku => sku.id === skuId)
+                // const skusId = props.goods.skus.find(skus => skus.id === skusId)
                 // 传递数据给父组件
                 emit('change', {
                     skuId: sku.id,
                     price: sku.price,
                     oldPrice: sku.oldPrice,
                     inventory: sku.inventory,
-                    specsText: sku.specs.reduce((p, n) => `${p} ${n.name}：${n.valueName}`, '').trim()
+                    specsText: sku.specs.reduce((p, n) => `${p} ${n.name}：${n.valueName}`, '').trim(),
+                    picture: sku.picture
                 })
             } else {
                 emit('change', {})
@@ -148,12 +150,16 @@ export default {
 
 <style scoped lang="scss">
 @mixin sku-state-mixin {
-    border: 1px solid #e4e4e4;
+    border: 1.5px solid #e4e4e4;
     margin-right: 10px;
     cursor: pointer;
 
+    &:hover{
+        border: 1.5px solid #517850;
+    }
+
     &.selected {
-        border-color: #666;
+        border-color: #517850;
     }
 
     &.disabled {
