@@ -7,9 +7,8 @@ const categoryStore = useCategoryStore()
 
 <template>
     <div class="home-category">
-        <div class="cover"></div>
-        <ul class="menu">
-            <li v-for="item in categoryStore.categoryList" :key="item.id">
+        <dl class="menu">
+            <dt v-for="item in categoryStore.categoryList" :key="item.id">
                 <RouterLink class="linkItem" to="/">{{ item.name }}</RouterLink>
                 <RouterLink class="linkItem" v-for="i in item.children.slice(0, 2)" :key="i" to="/">{{ i.name }}
                 </RouterLink>
@@ -31,34 +30,26 @@ const categoryStore = useCategoryStore()
                         </li>
                     </ul>
                 </div>
-            </li>
-        </ul>
+            </dt>
+        </dl>
     </div>
 </template>
 
 <style scoped lang='scss'>
 .home-category {
     width: 280px;
-    height: 500px;
+    height: 495px;
     background: #304539;
     position: relative;
     z-index: 99;
 
-    .cover {
-        width: 30px;
-        height: 500px;
-        background-color: #e7e7e7;
-        position: absolute;
-        left: 0;
-    }
-
     .menu {
 
-        li {
-            padding-left: 20px;
+        dt {
+            padding-left: 40px;
             height: 55px;
             line-height: 55px;
-            // list-style:none;
+            list-style:none;
 
             &:hover {
                 background: #84978d;
@@ -67,10 +58,6 @@ const categoryStore = useCategoryStore()
             a {
                 margin-right: 4px;
                 color: #fff;
-
-                // &:first-child {
-                //     font-size: 16px;
-                // }
             }
 
             .linkItem {
@@ -79,8 +66,8 @@ const categoryStore = useCategoryStore()
 
             .layer {
                 width: 1000px;
-                height: 500px;
-                background: #e7e7e7;
+                height: 495px;
+                background: rgba(229, 235, 233, 0.8);
                 position: absolute;
                 left: 280px;
                 top: 0;
@@ -101,6 +88,7 @@ const categoryStore = useCategoryStore()
                 ul {
                     display: flex;
                     flex-wrap: wrap;
+                    padding-left: 5%;
                     list-style: none;
 
                     li {
@@ -112,6 +100,7 @@ const categoryStore = useCategoryStore()
                         border: 1px solid #a8b7af;
                         border-radius: 4px;
                         background: #fff;
+                        box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1);
 
                         &:nth-child(3n) {
                             margin-right: 0;
@@ -127,7 +116,7 @@ const categoryStore = useCategoryStore()
                             // padding: 10px;
 
                             &:hover {                                
-                                background: #e7eeea;
+                                border: 1.5px solid #304539;
                             }
 
                             img {

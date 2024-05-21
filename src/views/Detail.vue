@@ -20,6 +20,14 @@ let skuObj = {}
 const skuChange = (sku) => {
     console.log(sku)
     skuObj = sku
+    // 根据所选的SKU更新价格，隨著選取不同規格大小價錢也可能不一樣
+    if (sku.price) {
+        goods.value.price = sku.price;
+    }
+    // 更新商品规格文本
+    if (sku.specsText) {
+        goods.value.attrsText = sku.specsText;
+    }
 }
 
 // count
@@ -36,7 +44,7 @@ const addCart = () => {
             id: goods.value.id, // 商品id
             name: goods.value.name, // 商品名稱
             picture: goods.value.mainPictures[0], // 圖片
-            price: goods.value.price, // 最新價格
+            price: skuObj.price || goods.value.price, // 最新價格
             count: count.value, // 商品數量
             skuId: skuObj.skuId, // skuId
             attrsText: skuObj.specsText, // 商品規格文本
@@ -106,9 +114,10 @@ const addCart = () => {
                             <p class="g-name">{{ goods.name }}</p>
                             <p class="g-desc">{{ goods.desc }}</p>
                             <p class="g-price">
-                                <span>{{ goods.oldPrice }}</span>
+                                <span>{{ goods.price }}</span>
                                 <span>{{ goods.price }}</span>
                             </p>
+                            <p>{{ goods.attrsText }}</p>
                             <div class="g-service">
                                 <dl>
                                     <dt>促销</dt>

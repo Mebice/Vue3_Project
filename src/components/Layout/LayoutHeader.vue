@@ -20,13 +20,8 @@ const categoryStore = useCategoryStore()
             <input type="text" placeholder="搜尋">
         </div>
 
-        <!-- <div class="searchArea">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" name="" id="" placeholder="搜尋"> 
-        </div> -->
-
-        <!-- <i class="fa-solid fa-cart-shopping"></i> -->
         <HeaderCart />
+        
     </div>
 </template>
 
@@ -34,7 +29,7 @@ const categoryStore = useCategoryStore()
 .bgArea {
     height: 80px;
     color: #304539;
-    border-bottom: 1px solid #7a8d78;
+    border-bottom: 2px solid #d5ded5;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -52,14 +47,13 @@ const categoryStore = useCategoryStore()
 
         &:hover {
             color: #8daa9a;
-            border-bottom: 1px solid #304539;
-
+            border-bottom: 2px solid #d5ded5;
         }
     }
 
     .active {
         color: #8daa9a;
-        border-bottom: 1px solid #304539;
+        border-bottom: 2px solid #d5ded5;
     }
 
     .search {

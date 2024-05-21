@@ -52,7 +52,7 @@ onMounted(() => getNewList())
         transition: all .5s;
         list-style:none;
         border-radius: 10px;
-        background-color: #f9fdf9;
+        background-color: #fbfbfb;
         box-shadow: 0 4px 4px rgb(0 0 0 / 10%);
 
         &:hover {

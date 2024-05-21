@@ -31,8 +31,8 @@ onMounted( () => getBanner() )
 
 <style scoped lang='scss'>
 .home-banner {
-    width: 950px;
-    height: 500px;
+    width: 78%;
+    height: 495px;
     position: absolute;
     left: 280px;
     top: 120px;
@@ -40,7 +40,7 @@ onMounted( () => getBanner() )
 
     img {
         width: 100%;
-        height: 500px;
+        height: 495px;
     }
 }
 </style>

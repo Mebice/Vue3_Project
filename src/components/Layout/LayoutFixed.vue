@@ -1,4 +1,5 @@
 <script setup>
+import HeaderCart from './HeaderCart.vue'
 import { useCategoryStore } from '@/stores/categoryStore'
 // vueUse
 import { useScroll } from '@vueuse/core'
@@ -12,15 +13,17 @@ const categoryStore = useCategoryStore()
     <div class="header-sticky" :class="{ show: y > 120 }">
         <!-- {{ y }} -->
         <img src="/logo.png" alt="">
-        <RouterLink class="link" to="/">首頁</RouterLink>
+        <RouterLink class="link" exact-active-class="active" to="/">首頁</RouterLink>
         <div class="routerItem" v-for="item in categoryStore.categoryList" :key="item.id">
-            <RouterLink class="link" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+            <RouterLink class="link" active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </div>
-        <div class="searchArea">
-            <input type="text" name="" id="" placeholder="搜尋"> <i class="fa-solid fa-magnifying-glass"></i>
+        <div class="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="搜尋">
+        </div>
 
-        </div>
-        <i class="fa-solid fa-cart-shopping"></i>
+        <HeaderCart />
+
     </div>
 </template>
 
@@ -30,7 +33,7 @@ const categoryStore = useCategoryStore()
     height: 60px;
     color: #304539;
     background-color: #fff;
-    border-bottom: 1px solid #7a8d78;
+    border-bottom: 2px solid #d5ded5;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -61,28 +64,35 @@ const categoryStore = useCategoryStore()
 
         &:hover {
             color: #8daa9a;
+            border-bottom: 2px solid #d5ded5;
         }
     }
 
-    input {
-        width: 150px;
-        height: 25px;
-        border: white;
-        border-bottom: 2px solid #82998b;
-        padding-left: 5px;
+    .active {
+        color: #8daa9a;
+        border-bottom: 2px solid #d5ded5;
     }
 
-    .fa-magnifying-glass {
-        font-size: 16pt;
+    .search {
+        position: relative;
+        border-bottom: 1.5px solid #cfded6;
+        line-height: 32px;
+        margin-left: 30px;
 
-        &:hover {
-            cursor: pointer;
-            color: #9eb3a7;
+        .fa-magnifying-glass {
+            font-size: 18px;
         }
-    }
 
-    .fa-cart-shopping {
-        font-size: 20pt;
+        input {
+            outline: none; // 框框隱藏
+            border: none;
+            padding-bottom: 0;
+            padding-left: 5px;
+
+            &:hover {
+                border: none;
+            }
+        }
     }
 }
 </style>

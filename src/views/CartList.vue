@@ -99,11 +99,13 @@ const allCheck = (selected) => {
 
 <style scoped lang="scss">
 .xtx-cart-page {
-    margin-top: 20px;
+    padding: 20px 0;
+    background-color: #f5f5f5;
 
     .cart {
         background: #fff;
         color: #666;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
 
         table {
             border-spacing: 0;
@@ -146,6 +148,7 @@ const allCheck = (selected) => {
 
         a {
             color: #418a5e;
+            text-decoration: none;
         }
 
         .xtx-numbox {
@@ -196,6 +199,7 @@ const allCheck = (selected) => {
         font-size: 16px;
         justify-content: space-between;
         padding: 0 30px;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
 
         .xtx-checkbox {
             color: #999;
