@@ -3,7 +3,7 @@
 import { defineStore } from "pinia";
 import { ref,computed } from "vue";
 import { useUserStore } from "./userStore";
-import { findNewCartListAPI, insertCartAPI, delCartAPI } from "@/apis/cart";
+import { findNewCartListAPI, insertCartAPI, delCartAPI, updateCartAPI, updateAllCartAPI } from "@/apis/cart";
 
 export const useCartStore = defineStore('cart', () => {
     const userStore = useUserStore()
@@ -17,6 +17,7 @@ export const useCartStore = defineStore('cart', () => {
         cartList.value = res.result
     }
 
+    // 加入購物車
     // 2.定義action - addCart
     const addCart = async(goods) => {
         const { skuId, count } = goods // 从 goods 参数中提取 skuId ， 解構賦值
@@ -54,6 +55,35 @@ export const useCartStore = defineStore('cart', () => {
             cartList.value.splice(idx, 1)
         }
     }
+
+    // 修改購物車 - 修改數量、是否選取
+    const updateCart = async(id, data) => {
+        if (isLogin.value) {
+            await updateCartAPI(id, data);
+            updateNewList();
+        } else {
+            const item = cartList.value.find((item) => item.skuId === id); // 在購物車列表中找到對應的商品
+            if (item) {
+                const { count, selected } = data;
+
+                // 更新購物車中的商品數量和選中狀態
+                if (count !== undefined) {
+                    item.count = count;
+                } else if (selected !== undefined) {
+                    item.selected = selected;
+                }
+            }
+        }
+    }
+
+    // 修改是否全選
+const updateAllCart = async (selected, ids) => {
+    if (isLogin.value) {
+        await updateAllCartAPI({ selected, ids })
+        await updateNewList();
+    }
+}
+
 
     // 清除購物車
     const clearCart = () => {
@@ -96,6 +126,8 @@ export const useCartStore = defineStore('cart', () => {
         selectedPrice,
         addCart,
         delCart,
+        updateCart,
+        updateAllCart,
         clearCart,
         singleCheck,
         allCheck,

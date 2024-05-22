@@ -54,6 +54,7 @@ const addCart = () => {
             attrsText: skuObj.specsText, // 商品規格文本
             selected: true // 商品是否選中
         })
+        ElMessage.success('加入購物車成功')
     } else {
         // 規格未選 提示用戶
         ElMessage.warning('請選擇規格')
@@ -144,7 +145,7 @@ const toggleImageZoom = () => {
                                 </el-button>
                             </div>
 
-                            <div class="g-service">
+                            <!-- <div class="g-service">
                                 <dl>
                                     <dt>促销</dt>
                                     <dd>12月好物放送，App领券購買直降120元</dd>
@@ -158,7 +159,7 @@ const toggleImageZoom = () => {
                                         <a href="javascript:;">了解详情</a>
                                     </dd>
                                 </dl>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>

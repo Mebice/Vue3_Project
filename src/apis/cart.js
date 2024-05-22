@@ -39,3 +39,22 @@ export const mergeCartAPI = (data) => {
         data
     })
 }
+
+// 修改購物車
+export const updateCartAPI = (id, data) => {
+    return request ({
+        url: `/member/cart/${id}`,
+        method: 'PUT',
+        data
+    })
+}
+
+// 修改-购物车全选/取消
+export const updateAllCartAPI = (data) => {
+    return request ({
+        url: '/member/cart/selected',
+        method: 'PUT',
+        data
+    })
+}
+

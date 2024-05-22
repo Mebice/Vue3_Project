@@ -1,5 +1,9 @@
 <script setup>
+import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
+
+const router = useRouter()
 const cartStore = useCartStore()
 
 // 單選回調
@@ -7,12 +11,38 @@ const singleCheck = (i, selected) => {
     console.log(i, selected)
     // store cartList 數組 無法知道誰被選中
     // 除了selected再加上一個用來篩選的參數 - skuId
-    cartStore.singleCheck(i.skuId, selected)
+    // 調用更新購物車選中狀態的方法
+    cartStore.singleCheck(i.skuId, selected);
+    // 無論選中還是取消選中，都調用更新購物車商品選中狀態的方法
+    cartStore.updateCart(i.skuId, { selected });
 }
 
+// 全選
 const allCheck = (selected) => {
-    cartStore.allCheck(selected)
+    cartStore.allCheck(selected) // 本地全選
+    const ids = cartStore.cartList.map(item => item.skuId); // 在cartList中映射提取id
+    cartStore.updateAllCart(selected, ids);
 }
+
+
+// 更改商品數量
+// 數量變更回調
+const handleCountChange = (skuId, count) => {
+    cartStore.updateCart(skuId, { count }); // 調用更新購物車商品數量的方法
+}
+
+const goCheckout = () => {
+    if (cartStore.selectedCount === 0) {
+        ElMessage({
+            message: '請選擇至少一項商品',
+            type: 'warning',
+        });
+    } else {
+        // 跳轉到結帳頁面
+        router.push('/checkout');
+    }
+}
+
 </script>
 
 <template>
@@ -43,7 +73,7 @@ const allCheck = (selected) => {
                             </td>
                             <td>
                                 <div class="goods">
-                                    <RouterLink to="/"><img :src="i.picture" alt="" /></RouterLink>
+                                    <RouterLink :to="`/detail/${i.id}`"><img :src="i.picture" alt="" /></RouterLink>
                                     <div>
                                         <p class="name ellipsis">
                                             {{ i.name }}
@@ -55,7 +85,8 @@ const allCheck = (selected) => {
                                 <p>&yen;{{ i.price }}</p>
                             </td>
                             <td class="tc">
-                                <el-input-number v-model="i.count" :min="1" />
+                                <el-input-number v-model="i.count" @change="handleCountChange(i.skuId, i.count)"
+                                    :min="1" />
                             </td>
                             <td class="tc">
                                 <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>
@@ -73,7 +104,7 @@ const allCheck = (selected) => {
                             <td colspan="6">
                                 <div class="cart-none">
                                     <el-empty description="購物車列表為空">
-                                        <el-button type="primary"@click="$router.push('/')">随便逛逛</el-button>
+                                        <el-button type="primary" @click="$router.push('/')">随便逛逛</el-button>
                                     </el-empty>
                                 </div>
                             </td>
@@ -89,7 +120,7 @@ const allCheck = (selected) => {
                     <span class="red">¥ {{ cartStore.selectedPrice.toFixed(2) }} </span>
                 </div>
                 <div class="total">
-                    <el-button size="large" type="primary" @click="$router.push('/checkout')">下單結算</el-button>
+                    <el-button size="large" type="primary" @click="goCheckout">下單結算</el-button>
                 </div>
             </div>
         </div>
