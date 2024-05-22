@@ -9,8 +9,9 @@ const categoryStore = useCategoryStore()
     <div class="home-category">
         <dl class="menu">
             <dt v-for="item in categoryStore.categoryList" :key="item.id">
-                <RouterLink class="linkItem" to="/">{{ item.name }}</RouterLink>
-                <RouterLink class="linkItem" v-for="i in item.children.slice(0, 2)" :key="i" to="/">{{ i.name }}
+                <RouterLink class="linkItem" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+                <RouterLink class="linkItem" v-for="i in item.children.slice(0, 2)" :key="i" :to="`/category/${item.id}`">
+                    {{ i.name }}
                 </RouterLink>
                 <!-- 弹层layer位置 -->
                 <div class="layer">

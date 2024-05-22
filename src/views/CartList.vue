@@ -52,15 +52,15 @@ const goCheckout = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th width="120">
+                            <th width="100">
                                 <!-- 全選 -->
                                 <el-checkbox :model-value="cartStore.isAll" @change="allCheck" />
                             </th>
-                            <th width="400">商品信息</th>
-                            <th width="220">单价</th>
-                            <th width="180">数量</th>
-                            <th width="180">小计</th>
-                            <th width="140">操作</th>
+                            <th width="450">商品信息</th>
+                            <th width="120">单价</th>
+                            <th width="220">数量</th>
+                            <th width="120">小计</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <!-- 商品列表 -->
@@ -149,7 +149,7 @@ const goCheckout = () => {
 
                 &:first-child {
                     text-align: left;
-                    padding-left: 30px;
+                    padding-left: 50px;
                     color: #999;
                 }
             }
@@ -159,6 +159,8 @@ const goCheckout = () => {
                 font-weight: normal;
                 line-height: 50px;
             }
+
+            
         }
     }
 
@@ -174,7 +176,7 @@ const goCheckout = () => {
     }
 
     .tc {
-        text-align: center;
+        // text-align: center;
 
         a {
             color: #418a5e;
