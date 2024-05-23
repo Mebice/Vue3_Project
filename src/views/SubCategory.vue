@@ -22,28 +22,28 @@ const reqData = ref({
 })
 const getGoodList = async () => {
     const res = await getSubCategoryAPI(reqData.value)
-    console.log('基礎列表',res)
+    console.log('基礎列表', res)
     goodList.value = res.result.items
 }
 onMounted(() => getGoodList())
 
 // tab 切換回調
 const tabChange = () => {
-    console.log('tab切換了',reqData.value.sortField)
+    console.log('tab切換了', reqData.value.sortField)
     reqData.value.page = 1
     getGoodList()
 }
 
 // 加載更多
 const disabled = ref(false)
-const load = async() => {
+const load = async () => {
     console.log('加載更多數據了')
     // 獲取下一頁數據
     reqData.value.page++
     const res = await getSubCategoryAPI(reqData.value)
-    goodList.value = [...goodList.value , ...res.result.items]
+    goodList.value = [...goodList.value, ...res.result.items]
     // 加載完畢 停止監聽
-    if(res.result.items.length === 0){
+    if (res.result.items.length === 0) {
         disabled.value = true
     }
 }
@@ -54,7 +54,7 @@ const load = async() => {
         <!-- 面包屑 -->
         <div class="bread-container">
             <el-breadcrumb separator=">">
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/' }">首頁</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: `/category/${categotyData.parentId}` }">{{ categotyData.parentName }}
                 </el-breadcrumb-item>
                 <el-breadcrumb-item>{{ categotyData.name }}</el-breadcrumb-item>
@@ -63,8 +63,8 @@ const load = async() => {
         <div class="sub-container">
             <el-tabs v-model="reqData.sortField" @tab-change="tabChange">
                 <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
-                <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
-                <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
+                <el-tab-pane label="最高人氣" name="orderNum"></el-tab-pane>
+                <el-tab-pane label="評論最多" name="evaluateNum"></el-tab-pane>
             </el-tabs>
             <div class="body" v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
                 <!-- 商品列表-->
@@ -78,58 +78,63 @@ const load = async() => {
 
 
 <style lang="scss" scoped>
-.bread-container {
-    padding: 25px 0;
-    color: #666;
-}
+.container {
+    padding:0 20px;
 
-.sub-container {
-    padding: 20px 10px;
-    background-color: #fff;
-
-    .body {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 0 10px;
+    .bread-container {
+        padding: 25px 0;
+        color: #666;
     }
 
-    .goods-item {
-        display: block;
-        width: 220px;
-        margin-right: 20px;
-        padding: 20px 30px;
-        text-align: center;
+    .sub-container {
+        // padding: 20px 10px;
+        background-color: #fff;
 
-        img {
-            width: 160px;
-            height: 160px;
+        .body {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 10px;
         }
 
-        p {
-            padding-top: 10px;
+        .goods-item {
+            display: block;
+            width: 200px;
+            height: 300px;
+            margin-right: 20px;
+            padding: 20px 30px;
+            text-align: center;
+
+            img {
+                width: 160px;
+                height: 160px;
+            }
+
+            p {
+                padding-top: 10px;
+            }
+
+            .name {
+                font-size: 16px;
+            }
+
+            .desc {
+                color: #999;
+                height: 29px;
+            }
+
+            .price {
+                color: #4b2828;
+                font-size: 20px;
+            }
         }
 
-        .name {
-            font-size: 16px;
+        .pagination-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
         }
 
-        .desc {
-            color: #999;
-            height: 29px;
-        }
 
-        .price {
-            color: #4b2828;
-            font-size: 20px;
-        }
     }
-
-    .pagination-container {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-    }
-
-
 }
 </style>

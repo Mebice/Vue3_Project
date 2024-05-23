@@ -391,7 +391,7 @@ onMounted(() => getCheckInfo())
 
 <style scoped lang="scss">
 .xtx-pay-checkout-page {
-    padding: 20px 0;
+    padding: 5px 20px 20px 20px;
     background-color: #f5f5f5;
 
     .wrapper {

@@ -50,7 +50,6 @@ const categoryStore = useCategoryStore()
             padding-left: 40px;
             height: 55px;
             line-height: 55px;
-            list-style:none;
 
             &:hover {
                 background: #84978d;
@@ -79,6 +78,7 @@ const categoryStore = useCategoryStore()
                     font-weight: normal;
                     line-height: 80px;
                     margin-left: 50px;
+                    margin-top: -1px;
 
                     small {
                         font-size: 16px;
@@ -89,8 +89,9 @@ const categoryStore = useCategoryStore()
                 ul {
                     display: flex;
                     flex-wrap: wrap;
-                    padding-left: 5%;
+                    padding-left: 4%;
                     list-style: none;
+                    margin-top: -30px;
 
                     li {
                         width: 280px;
@@ -114,7 +115,6 @@ const categoryStore = useCategoryStore()
                             align-items: center;
                             justify-content: center;
                             text-decoration: none;
-                            // padding: 10px;
 
                             &:hover {                                
                                 border: 1.5px solid #304539;

@@ -204,6 +204,7 @@ const toggleImageZoom = () => {
 
 <style scoped lang='scss'>
 .xtx-goods-page {
+    padding: 0 20px;
     background-color: #f5f5f5;
 
     .goods-info {

@@ -113,7 +113,7 @@ const cartStore = useCartStore()
             left: 0;
             bottom: 0;
             height: 70px;
-            width: 100%;
+            width: 95%;
             padding: 10px;
             display: flex;
             justify-content: space-between;
@@ -183,6 +183,7 @@ const cartStore = useCartStore()
                 display: flex;
                 align-items: center;
                 text-decoration: none;
+                color: $mainColor;
 
                 img {
                     height: 80px;

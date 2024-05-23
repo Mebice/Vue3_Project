@@ -38,27 +38,27 @@ onMounted(() => getGoods())
 <style scoped lang='scss'>
 .home-product {
     background: #fff;
-    margin-top: 20px;
-    margin-bottom: 50px;
+    // margin-top: 20px;
+    // margin-bottom: 50px;
 
-    .sub {
-        margin-bottom: 2px;
+    // .sub {
+    //     margin-bottom: 2px;
 
-        a {
-            padding: 2px 12px;
-            font-size: 16px;
-            border-radius: 4px;
+    //     a {
+    //         padding: 2px 12px;
+    //         font-size: 16px;
+    //         border-radius: 4px;
 
-            &:hover {
-                background: #999;
-                color: #fff;
-            }
+    //         &:hover {
+    //             background: #999;
+    //             color: #fff;
+    //         }
 
-            &:last-child {
-                margin-right: 80px;
-            }
-        }
-    }
+    //         &:last-child {
+    //             margin-right: 80px;
+    //         }
+    //     }
+    // }
 
     .box {
         display: flex;
@@ -109,8 +109,6 @@ onMounted(() => getGoods())
             flex-wrap: wrap;
 
             li {
-                width: 200px;
-                height: 200px;
                 margin-right: 10px;
                 margin-bottom: 10px;
                 list-style: none;
@@ -127,8 +125,8 @@ onMounted(() => getGoods())
 
         .goods-item {
             display: block;
-            width: 220px;
-            padding: 20px 30px 0px 30px;
+            width: 150px;
+            height: 320px;
             text-align: center;
             transition: all .5s;
             text-decoration: none;
@@ -149,7 +147,6 @@ onMounted(() => getGoods())
                 text-overflow: ellipsis; //超出文字部分以點點點表示
                 overflow: hidden; //超出隱藏
                 white-space: nowrap; //不換行
-
             }
 
             .name {

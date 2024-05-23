@@ -51,30 +51,33 @@ const { categoryData } = useCategory()
 
 <style scoped lang="scss">
 .top-category {
+    padding: 0 20px 20px 20px;
+    background-color: #f5f5f5;
+
     h3 {
+        padding-top: 10px;
         font-size: 28px;
         color: #666;
         font-weight: normal;
         text-align: center;
-        line-height: 100px;
     }
 
     .sub-list {
-        margin-top: 20px;
+        margin-top: 30px;
         background-color: #fff;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
 
         ul {
             display: flex;
-            padding: 0 32px;
             flex-wrap: wrap;
 
             li {
-                width: 168px;
-                height: 160px;
+                width: 155px;
                 list-style:none;
 
 
                 a {
+                    color: $mainColor;
                     text-align: center;
                     text-decoration: none;
                     display: block;
@@ -85,12 +88,8 @@ const { categoryData } = useCategory()
                         height: 100px;
                     }
 
-                    p {
-                        line-height: 40px;
-                    }
-
                     &:hover {
-                        color: #e09b9b;
+                        color: $hoverColor;
                     }
                 }
             }
@@ -101,6 +100,7 @@ const { categoryData } = useCategory()
         background-color: #fff;
         margin-top: 20px;
         position: relative;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
 
         .head {
             .xtx-more {
@@ -121,7 +121,7 @@ const { categoryData } = useCategory()
         .body {
             display: flex;
             justify-content: space-around;
-            padding: 0 40px 30px;
+            padding: 0 20px 30px;
         }
     }
 
@@ -130,9 +130,10 @@ const { categoryData } = useCategory()
     }
 
     .home-banner {
-        width: 950px;
+        width: 100%;
         height: 500px;
         margin: 0 auto;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
 
         img {
             width: 100%;

@@ -29,7 +29,7 @@ const categoryStore = useCategoryStore()
 
 <style lang="scss" scoped>
 .header-sticky {
-    width: 98.7vw;
+    width: 95%;
     height: 60px;
     color: #304539;
     background-color: #fff;

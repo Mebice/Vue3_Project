@@ -51,16 +51,16 @@ const goCheckout = () => {
             <div class="cart">
                 <table>
                     <thead>
-                        <tr>
-                            <th width="100">
+                        <tr v-if="cartStore.cartList.length > 0"> 
+                            <th >
                                 <!-- 全選 -->
                                 <el-checkbox :model-value="cartStore.isAll" @change="allCheck" />
                             </th>
-                            <th width="450">商品信息</th>
-                            <th width="120">单价</th>
-                            <th width="220">数量</th>
-                            <th width="120">小计</th>
-                            <th>操作</th>
+                            <th>商品信息</th>
+                            <th>单价</th>
+                            <th width="300">数量</th>
+                            <th width="50">小计</th>
+                            <th width="150">操作</th>
                         </tr>
                     </thead>
                     <!-- 商品列表 -->
@@ -82,14 +82,14 @@ const goCheckout = () => {
                                 </div>
                             </td>
                             <td class="tc">
-                                <p>&yen;{{ i.price }}</p>
+                                <p>&yen; {{ i.price }}</p>
                             </td>
                             <td class="tc">
                                 <el-input-number v-model="i.count" @change="handleCountChange(i.skuId, i.count)"
                                     :min="1" />
                             </td>
                             <td class="tc">
-                                <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>
+                                <p class="f16 red">&yen; {{ (i.price * i.count).toFixed(2) }}</p>
                             </td>
                             <td class="tc">
                                 <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消"
@@ -129,7 +129,7 @@ const goCheckout = () => {
 
 <style scoped lang="scss">
 .xtx-cart-page {
-    padding: 20px 0;
+    padding: 20px;
     background-color: #f5f5f5;
 
     .cart {
@@ -144,7 +144,7 @@ const goCheckout = () => {
 
             th,
             td {
-                padding: 10px;
+                padding: 10px ;
                 border-bottom: 1px solid #f5f5f5;
 
                 &:first-child {
@@ -159,14 +159,11 @@ const goCheckout = () => {
                 font-weight: normal;
                 line-height: 50px;
             }
-
-            
         }
     }
 
     .cart-none {
-        text-align: center;
-        padding: 120px 0;
+        padding: 60px 450px;
         background: #fff;
 
         p {
@@ -176,7 +173,7 @@ const goCheckout = () => {
     }
 
     .tc {
-        // text-align: center;
+        text-align: center;
 
         a {
             color: #418a5e;
@@ -204,6 +201,7 @@ const goCheckout = () => {
     .goods {
         display: flex;
         align-items: center;
+        margin-left: 50px;
 
         img {
             width: 100px;
