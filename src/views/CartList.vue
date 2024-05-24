@@ -57,8 +57,8 @@ const goCheckout = () => {
                                 <el-checkbox :model-value="cartStore.isAll" @change="allCheck" />
                             </th>
                             <th>商品信息</th>
-                            <th>单价</th>
-                            <th width="300">数量</th>
+                            <th width="80">单价</th>
+                            <th width="250">数量</th>
                             <th width="50">小计</th>
                             <th width="150">操作</th>
                         </tr>
