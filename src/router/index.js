@@ -45,7 +45,7 @@ const router = createRouter({
           component: () => import('../views/Member.vue'),
           children: [
             {
-              path:'user',
+              path:'', // 默認頁
               component: () => import('../components/Member/UserInfo.vue'),    
             },
             {

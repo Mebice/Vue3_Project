@@ -5,8 +5,8 @@
         <div class="xtx-member-aside">
             <div class="user-manage">
                 <h4>我的账户</h4>
-                <div class="links">
-                    <RouterLink to="/member/user">个人中心</RouterLink>
+                <div class="links" >
+                    <RouterLink to="/member/">个人中心</RouterLink>
                 </div>
                 <h4>交易管理</h4>
                 <div class="links">
@@ -31,6 +31,7 @@
     .xtx-member-aside {
         width: 220px;
         margin-right: 20px;
+        padding-bottom: 25px;
         border-radius: 2px;
         background-color: #fff;
         box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
