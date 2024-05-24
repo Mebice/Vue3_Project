@@ -160,15 +160,6 @@ const clearForm = () => {
     formRef.value.resetFields(); // 重置表单数据
 }
 
-//     // 離開切換地址彈窗時重置選取的active還有radio回到默認值
-// const clearChoose = () => {
-//     // radio回到默認值
-//     const defaultAddress = checkInfo.value.userAddresses.find(item => item.isDefault === 0);
-//     radio.value = defaultAddress ? defaultAddress.id : null;
-//     //   回到默認的激活默認地址
-//     // activeAddress.value = defaultAddress || {};  // 如果沒有默認地址，設置為空對象
-// }
-
 // 當 切換彈窗 打開時激活默認地址
 // 監聽 showDialog 的變化
 watch(showDialog, (newVal) => {
@@ -309,7 +300,7 @@ onMounted(() => getCheckInfo())
         </div>
     </div>
     <!-- 切换地址 -->
-    <el-dialog v-model="showDialog" @close="clearChoose" title="切换收货地址" width="32%" center>
+    <el-dialog v-model="showDialog" title="切换收货地址" width="32%" center>
         <div class="addressWrapper">
             <div class="text item" :class="{ active: activeAddress.id === item.id }" @click="switchAddress(item)"
                 v-for="item in checkInfo.userAddresses" :key="item.id">

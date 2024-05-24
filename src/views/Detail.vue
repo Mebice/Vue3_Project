@@ -137,7 +137,7 @@ const toggleImageZoom = () => {
                             <!-- sku组件 -->
                             <XtxSku :goods="goods" @change="skuChange" />
                             <!-- 数据组件 -->
-                            <el-input-number v-model="count" @change="countChange" min="1" />
+                            <el-input-number v-model="count" @change="countChange" :min="1" />
                             <!-- 按钮组件 -->
                             <div>
                                 <el-button size="large" class="btn" @click="addCart">
@@ -340,8 +340,8 @@ const toggleImageZoom = () => {
         width: 500px;
         align-items: center;
         text-align: center;
-        height: 140px;
         list-style: none;
+        margin-top: 50px;
 
         li {
             flex: 1;

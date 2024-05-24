@@ -36,10 +36,10 @@ const top = ref(0)
 const positionX = ref(0)
 const positionY = ref(0)
 watch([elementX, elementY, isOutside], () => {
-    console.log('xy變化了')
+    // console.log('xy變化了')
     // 如果鼠標沒有移入到盒子裡面 就不執行後面的邏輯
     if (isOutside.value) return
-    console.log('後續邏輯執行了')
+    // console.log('後續邏輯執行了')
     // 有效範圍內控制滑塊距離
     // 橫向
     if (elementX.value > 100 && elementX.value < 300) {

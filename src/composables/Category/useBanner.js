@@ -8,7 +8,7 @@ export function useBanner(){
     const res = await getBannerAPI({
         distributionSite: '2'
     })
-    console.log("Banner輪播圖", res)
+    // console.log("Banner輪播圖", res)
     bannerList.value = res.result
     }
 

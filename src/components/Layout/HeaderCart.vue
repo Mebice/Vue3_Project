@@ -12,7 +12,7 @@ const cartStore = useCartStore()
             <div class="list">
 
                 <div class="item" v-for="i in cartStore.cartList" :key="i">
-                    <RouterLink :to="`/detail/${i.id}`">
+                    <a :href="`/detail/${i.id}`">
                         <img :src="i.picture" alt="" />
                         <div class="center">
                             <p class="name ellipsis-2">
@@ -24,7 +24,7 @@ const cartStore = useCartStore()
                             <p class="price">&yen;{{ i.price }}</p>
                             <p class="count">x{{ i.count }}</p>
                         </div>
-                    </RouterLink>
+                    </a>
                     <i class="fa-solid fa-xmark" @click="cartStore.delCart(i.skuId)"></i>
                 </div>
 

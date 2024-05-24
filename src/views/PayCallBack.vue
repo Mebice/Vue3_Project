@@ -45,7 +45,6 @@ onMounted(() => getOrderInfo())
     padding: 100px 0;
     background: #fff;
     text-align: center;
-    // margin-top: 20px;
 
     .fa-circle-check {
         font-size: 50pt;
