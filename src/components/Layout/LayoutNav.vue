@@ -21,7 +21,14 @@ const confirm = () => {
             <!-- 多模板渲染 區分登入狀態和非登入狀態 -->
             <!-- 登入時為第一個模板 登出時為第二個模板 判斷方式: 是否有token -->
             <template v-if="userStore.userInfo.token">
-                <a href="javascript:;"><i class="fa-regular fa-circle-user"></i>{{ userStore.userInfo.account }}</a>
+                <div class="name">
+                    <div class="avatar">
+                        <img :src="userStore.userInfo?.avatar" />
+                    </div>
+                    <a href="javascript:;">
+                        {{ userStore.userInfo.account }}
+                    </a>
+                </div>
 
                 <el-popconfirm @confirm="confirm" title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
                     <template #reference>
@@ -50,8 +57,15 @@ const confirm = () => {
     justify-content: end;
 
     .nav {
+        display: flex;
+        align-items: center;
         justify-content: space-around;
         margin-right: 50px;
+
+        .name{
+            display: flex;
+            align-items: center;
+        }
 
         a {
             color: #ffffff;
@@ -60,10 +74,26 @@ const confirm = () => {
             border-right: 1px solid #c0c0c0;
             line-height: 1; // 行高
 
-            &:hover{
+            &:hover {
                 color: #bccfc5;
             }
+
+
         }
+
+        .avatar {
+            background-color: #fff;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
 
         .lia {
             padding: 0 10px;

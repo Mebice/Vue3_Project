@@ -12,16 +12,23 @@ const tabTypes = [
     { name: "complete", label: "已完成" },
     { name: "cancel", label: "已取消" }
 ]
-// 订单列表
-const orderList = ref([]) 
+// 获取订单列表
+const orderList = ref([])
 const params = ref({
-    orderState:0,
-    page:1,
-    pageSize:2
+    orderState: 0,
+    page: 1,
+    pageSize: 2
 })
-const getOrderList = async() => {
+const getOrderList = async () => {
     const res = await getUserOrder(params.value)
     orderList.value = res.result.items
+}
+
+// tab切换
+const tabChange = (type) => {
+    console.og(type)
+    params.value.orderState = type
+    getOrderList()
 }
 
 onMounted(() => getOrderList())
@@ -29,14 +36,13 @@ onMounted(() => getOrderList())
 
 <template>
     <div class="order-container">
-        <el-tabs>
+        <el-tabs @tab-change="tabChange">
             <!-- tab切换 -->
             <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
             <div class="main-container">
                 <div class="holder-container" v-if="orderList.length === 0">
                     <el-empty description="暂无订单数据" />
-                    {{ orderList }}
                 </div>
                 <div v-else>
                     <!-- 订单列表 -->
@@ -182,11 +188,6 @@ onMounted(() => getOrderList())
         .column {
             border-left: 1px solid #f5f5f5;
             text-align: center;
-            padding: 20px;
-
-            >p {
-                padding-top: 10px;
-            }
 
             &:first-child {
                 border-left: none;
@@ -202,6 +203,7 @@ onMounted(() => getOrderList())
                         border-bottom: 1px solid #f5f5f5;
                         padding: 10px;
                         display: flex;
+                        align-items: center;
 
                         &:last-child {
                             border-bottom: none;
@@ -210,7 +212,13 @@ onMounted(() => getOrderList())
                         .image {
                             width: 70px;
                             height: 70px;
+                            margin-right: 10px;
                             border: 1px solid #f5f5f5;
+
+                            img{
+                                width: 100%;
+                                height: 100%;
+                            }
                         }
 
                         .info {
@@ -220,10 +228,6 @@ onMounted(() => getOrderList())
 
                             p {
                                 margin-bottom: 5px;
-
-                                &.name {
-                                    height: 38px;
-                                }
 
                                 &.attr {
                                     color: #999;
@@ -237,7 +241,7 @@ onMounted(() => getOrderList())
                         }
 
                         .price {
-                            width: 100px;
+                            width: 120px;
                         }
 
                         .count {
@@ -249,6 +253,10 @@ onMounted(() => getOrderList())
 
             &.state {
                 width: 120px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
 
                 .green {
                     color: $xtxColor;
@@ -257,21 +265,40 @@ onMounted(() => getOrderList())
 
             &.amount {
                 width: 200px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
 
                 .red {
                     color: $priceColor;
+                }
+
+                p{
+                    line-height: 5px;
                 }
             }
 
             &.action {
                 width: 140px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
 
                 a {
                     display: block;
+                    text-decoration: none;
+                    line-height: 0;
+
 
                     &:hover {
-                        color: $xtxColor;
+                        color: $hoverColor;
                     }
+                }
+
+                .el-button{
+                    width: 70px;
+                    margin-bottom: 10px;
                 }
             }
         }
