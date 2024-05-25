@@ -1,6 +1,8 @@
 <script setup>
 import { getUserOrder } from '@/apis/order'
 import { ref, onMounted } from 'vue';
+import { useCountDown } from '@/composables/useCountDown';
+const { formatTime, start } = useCountDown()
 
 // tab列表
 const tabTypes = [
@@ -12,6 +14,7 @@ const tabTypes = [
     { name: "complete", label: "已完成" },
     { name: "cancel", label: "已取消" }
 ]
+const total = ref(0)  // 總頁數
 // 获取订单列表
 const orderList = ref([])
 const params = ref({
@@ -19,15 +22,30 @@ const params = ref({
     page: 1,
     pageSize: 2
 })
+
 const getOrderList = async () => {
     const res = await getUserOrder(params.value)
     orderList.value = res.result.items
+    total.value = res.result.counts
+    res.result.items.forEach(item => {
+        if (item.countdown != -1) {
+            start(item.countdown)
+        }
+    })
+
 }
 
 // tab切换
 const tabChange = (type) => {
     console.og(type)
     params.value.orderState = type
+    getOrderList()
+}
+
+// 頁數切換
+const pageChange = (page) => {
+    console.log(page)
+    params.value.page = page
     getOrderList()
 }
 
@@ -52,8 +70,9 @@ onMounted(() => getOrderList())
                             <span>订单编号：{{ order.id }}</span>
                             <!-- 未付款，倒计时时间还有 -->
                             <span class="down-time" v-if="order.orderState === 1">
-                                <i class="iconfont icon-down-time"></i>
-                                <b>付款截止: {{ order.countdown }}</b>
+                                <i class="fa-regular fa-clock"></i>
+                                <b v-if="order.countdown != -1"> 付款截止: {{ formatTime }}</b>
+                                <b v-else> 時間已截止未付款</b>
                             </span>
                         </div>
                         <div class="body">
@@ -113,7 +132,8 @@ onMounted(() => getOrderList())
                     </div>
                     <!-- 分页 -->
                     <div class="pagination-container">
-                        <el-pagination background layout="prev, pager, next" />
+                        <el-pagination :total="total" @current-change="pageChange" :page-size="params.pageSize"
+                            background layout="prev, pager, next, total, jumper" />
                     </div>
                 </div>
             </div>
@@ -215,14 +235,14 @@ onMounted(() => getOrderList())
                             margin-right: 10px;
                             border: 1px solid #f5f5f5;
 
-                            img{
+                            img {
                                 width: 100%;
                                 height: 100%;
                             }
                         }
 
                         .info {
-                            width: 220px;
+                            width: 200px;
                             text-align: left;
                             padding: 0 10px;
 
@@ -252,7 +272,7 @@ onMounted(() => getOrderList())
             }
 
             &.state {
-                width: 120px;
+                width: 60px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -264,7 +284,7 @@ onMounted(() => getOrderList())
             }
 
             &.amount {
-                width: 200px;
+                width: 150px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -273,7 +293,7 @@ onMounted(() => getOrderList())
                     color: $priceColor;
                 }
 
-                p{
+                p {
                     line-height: 5px;
                 }
             }
@@ -296,8 +316,9 @@ onMounted(() => getOrderList())
                     }
                 }
 
-                .el-button{
+                .el-button {
                     width: 70px;
+                    height: 30px;
                     margin-bottom: 10px;
                 }
             }

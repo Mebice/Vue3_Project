@@ -7,7 +7,7 @@ import 'element-plus/theme-chalk/el-message.css'
 
 const httpInstance = axios.create({
 baseURL:'http://pcapi-xiaotuxian-front-devtest.itheima.net',
-timeout:12000
+timeout:18000
 })
 
 // 攔截器
