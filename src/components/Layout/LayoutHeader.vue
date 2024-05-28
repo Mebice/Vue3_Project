@@ -1,9 +1,16 @@
 <script setup>
 import HeaderCart from './HeaderCart.vue';
 import { useCategoryStore } from '@/stores/categoryStore'
+import { useSearch } from '@/composables/useSearch'
+import { useSearchStore } from '@/stores/searchStore'
+import { storeToRefs } from 'pinia';
 
 // 使用 pinna 管理
 const categoryStore = useCategoryStore()
+
+const searchStore = useSearchStore();
+const { searchQuery } = storeToRefs(searchStore);
+const { handleKeyPress } = useSearch();
 
 </script>
 
@@ -17,7 +24,7 @@ const categoryStore = useCategoryStore()
 
         <div class="search">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="搜尋">
+            <input v-model="searchQuery" @keypress="handleKeyPress" type="text" placeholder="搜尋">
         </div>
 
         <HeaderCart />

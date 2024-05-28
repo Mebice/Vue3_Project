@@ -2,6 +2,7 @@
 import { getUserOrder } from '@/apis/order'
 import { ref, onMounted } from 'vue';
 import { useCountDown } from '@/composables/useCountDown';
+
 const { formatTime, start } = useCountDown()
 
 // tab列表
@@ -37,7 +38,7 @@ const getOrderList = async () => {
 
 // tab切换
 const tabChange = (type) => {
-    console.og(type)
+    console.log(type)
     params.value.orderState = type
     getOrderList()
 }
@@ -47,6 +48,19 @@ const pageChange = (page) => {
     console.log(page)
     params.value.page = page
     getOrderList()
+}
+
+// 创建格式化函数
+const fomartPayState = (payState) => {
+    const stateMap = {
+        1: '待付款',
+        2: '待发货',
+        3: '待收货',
+        4: '待评价',
+        5: '已完成',
+        6: '已取消'
+    }
+    return stateMap[payState]
 }
 
 onMounted(() => getOrderList())
@@ -96,7 +110,7 @@ onMounted(() => getOrderList())
                                 </ul>
                             </div>
                             <div class="column state">
-                                <p>{{ order.orderState }}</p>
+                                <p>{{ fomartPayState(order.orderState) }}</p>
                                 <p v-if="order.orderState === 3">
                                     <a href="javascript:;" class="green">查看物流</a>
                                 </p>

@@ -54,6 +54,10 @@ const router = createRouter({
             },
           ]
         },
+        {
+          path:'search',
+          component: () => import('../views/Search.vue')
+        },
       ]
     },
     {
@@ -68,5 +72,15 @@ const router = createRouter({
     }
   }
 })
+
+// 全局导航守卫
+router.beforeEach((to, from, next) => {
+  // 如果即将导航的目标路径不是搜索页
+  if (to.path !== '/search') {
+      // 清除sessionStorage中的搜索关键词
+      sessionStorage.removeItem('searchQuery');
+  }
+  next();
+});
 
 export default router
