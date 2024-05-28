@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '../views/Layout.vue'
+import { useSearchStore } from '@/stores/searchStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,11 +76,17 @@ const router = createRouter({
 
 // 全局导航守卫
 router.beforeEach((to, from, next) => {
+  console.log(`Navigating from ${from.path} to ${to.path}`);
   // 如果即将导航的目标路径不是搜索页
   if (to.path !== '/search') {
+    console.log('Clearing searchQuery from sessionStorage');
       // 清除sessionStorage中的搜索关键词
       sessionStorage.removeItem('searchQuery');
+      // 获取搜索 store 并清空搜索关键词
+      const searchStore = useSearchStore();
+      searchStore.clearSearchQuery();
   }
+  console.log(`Current searchQuery: ${sessionStorage.getItem('searchQuery')}`);
   next();
 });
 

@@ -25,24 +25,24 @@ const confirm = () => {
                     <div class="avatar">
                         <img :src="userStore.userInfo?.avatar" />
                     </div>
-                    <a href="javascript:;">
+                    <a class="a1">
                         {{ userStore.userInfo.account }}
                     </a>
                 </div>
 
                 <el-popconfirm @confirm="confirm" title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
                     <template #reference>
-                        <a href="javascript:;">退出登录</a>
+                        <a class="a2" href="javascript:;">退出登录</a>
                     </template>
                 </el-popconfirm>
 
-                <a href="/member/order">我的订单</a>
-                <a class="lia" href="/member">会员中心</a>
+                <a class="a2" href="/member/order">我的订单</a>
+                <a class="lia a2" href="/member">会员中心</a>
             </template>
             <template v-else>
-                <a href="javascript:;" @click="$router.push('/Login')">请先登录</a>
-                <a href="javascript:;">帮助中心</a>
-                <a class="lia" href="javascript:;">关于我们</a>
+                <a class="a2" href="javascript:;" @click="$router.push('/Login')">请先登录</a>
+                <a class="a2" href="javascript:;">帮助中心</a>
+                <a class="lia a2" href="javascript:;">关于我们</a>
             </template>
         </div>
     </div>
@@ -62,7 +62,7 @@ const confirm = () => {
         justify-content: space-around;
         margin-right: 50px;
 
-        .name{
+        .name {
             display: flex;
             align-items: center;
         }
@@ -73,12 +73,12 @@ const confirm = () => {
             padding: 0 10px;
             border-right: 1px solid #c0c0c0;
             line-height: 1; // 行高
+        }
 
+        .a2 {
             &:hover {
                 color: #bccfc5;
             }
-
-
         }
 
         .avatar {

@@ -1,6 +1,6 @@
 <script setup>
 import GoodsItem from '@/components/Home/GoodsItem.vue';
-import { ref, onMounted, onBeforeUnmount, watch  } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getSubCategoryAPI } from '@/apis/category'
 
@@ -12,7 +12,6 @@ const reqData = ref({
     pageSize: 20,
     sortField: 'publishTime',
 })
-
 const searchQuery = ref(sessionStorage.getItem('searchQuery') || ''); // 用于绑定搜索输入框的值
 
 const getGoodList = async () => {
@@ -53,8 +52,7 @@ watch(
         }
     },
     { immediate: true }
-);
-
+)
 
 // 加載更多
 const disabled = ref(false)
@@ -70,31 +68,35 @@ const load = async () => {
     }
 }
 
-// 离开页面时清除本地存储中的搜索关键词
-onBeforeUnmount(() => {
-    sessionStorage.removeItem('searchQuery');
-})
 </script>
 
 <template>
     <div class="bgArea">
-        <h1>搜尋 '{{ searchQuery }}'</h1>
-        <!-- <div class="search">
-            <input v-model="searchQuery" @keypress="handleKeyPress" type="text" placeholder="搜尋">
-            <button @click="searchGoods"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div> -->
-
+        <h3>" <span>{{ searchQuery }}</span> " 相關搜尋結果</h3>
         <div v-if="goodList.length != 0" class="body" v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
             <!-- 商品列表-->
             <GoodsItem v-for="goods in goodList" :goods="goods" :key="goods.id" />
         </div>
-        <div class="body" v-else>無搜尋結果</div>
+        <div class="body" v-else>
+            <el-empty description="無相關搜尋結果">
+            </el-empty>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .bgArea {
     text-align: center;
+
+    h3 {
+        color: #929292;
+
+        span {
+            color: #537153;
+        }
+
+    }
+
 
     .body {
         display: flex;

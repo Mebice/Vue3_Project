@@ -57,7 +57,12 @@
         </div>
         <div class="lineArea"></div>
         <div class="detailsArea">
-            <span>關於我們 | 幫助中心 | 售後服務 | 配送與驗收 | 商務合作 | 搜尋推薦 </span>
+            <span>關於我們</span>
+            <span>幫助中心</span>
+            <span>售後服務</span>
+            <span>配送與驗收</span>
+            <span>商務合作</span>
+            <span class="span2">搜尋推薦</span>
         </div>
     </div>
 </template>
@@ -85,7 +90,7 @@
 
             .square {
                 width: 70px;
-                height: 70px;
+                height: 60px;
                 border: 2px solid #414141;
                 border-radius: 10px;
                 margin: 5px;
@@ -123,13 +128,11 @@
 
                 .squText {
                     font-size: 10pt;
+                    margin: 5px 0;
                 }
 
                 button {
                     font-size: 10pt;
-                    position: absolute;
-                    bottom: 0;   
-                    left: 20px;
                     background-color: #304539;
                     color: #ffffff;
                     border-radius: 5px;
@@ -149,6 +152,7 @@
 
             .squText{
                 font-size: 11pt;
+                margin: 10px 0;
             }
         }
     }
@@ -177,6 +181,15 @@
         justify-content: center;
         align-items: center;
         color: #ffffff;
+
+        span{
+            padding: 0 10px;
+            border-right: 1px solid #9f9f9f;
+        }
+
+        .span2{
+            border-right: 1px solid #304539;
+        }
     }
 }
 </style>
