@@ -6,6 +6,7 @@ import 'element-plus/theme-chalk/el-message.css' // 警示框樣式
 import { Edit, Delete } from '@element-plus/icons-vue' // 圖標
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
+import { regionData } from 'element-china-area-data'; // 引入省市区数据
 
 const cartStore = useCartStore()
 const router = useRouter()
@@ -21,27 +22,27 @@ const radio = ref(null)         // 是否默認
 const form = ref({
     receiver: '',               // 姓名
     contact: '00123456789',     // 联系方式
-    provinceCode: '000',        // 省份编码
-    cityCode: '000',            // 城市编码
-    countyCode: '000',          // 地区编码
-    address: '',                // 详细地址
-    postalCode: '000',          // 邮政编码
-    addressTags: '000',         // 地址标签
+    provinceCode: '',        // 省份编码 使用選取
+    cityCode: '',            // 城市编码 使用選取
+    countyCode: '',          // 地区编码 使用選取
+    address: '',                // 详细地址: 路
+    postalCode: '',          // 邮政编码 使用選取 6位數
+    addressTags: '家',         // 地址标签
     isDefault: 1,               // 收货地址是否默认 : 0是, 1不是
-    fullLocation: '000',        // 完整地址
+    fullLocation: [],           // 完整地址: 省市區
 })
 // 修改地址表單
 const updateForm = ref({
     receiver: '',               // 姓名
     contact: '00123456789',     // 联系方式
-    provinceCode: '000',        // 省份编码
-    cityCode: '000',            // 城市编码
-    countyCode: '000',          // 地区编码
-    address: '',                // 详细地址
-    postalCode: '000',          // 邮政编码
-    addressTags: '000',         // 地址标签
+    provinceCode: '100000',        // 省份编码
+    cityCode: '100000',            // 城市编码
+    countyCode: '100000',          // 地区编码
+    address: '',                // 详细地址: 路
+    postalCode: '100000',          // 邮政编码
+    addressTags: '家',         // 地址标签
     isDefault: 1,               // 收货地址是否默认 : 0是, 1不是
-    fullLocation: '000',        // 完整地址
+    fullLocation: [],           // 完整地址: 省市區
 })
 
 // 獲取詳情
@@ -51,7 +52,7 @@ const getCheckInfo = async () => {
     // 適配默認地址
     // 從地址列表中渲染出來 isDefault === 0 那一項
     const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
-    curAddress.value = item 
+    curAddress.value = item
     radio.value = item?.id || null
 }
 
@@ -94,6 +95,9 @@ const delAress = async (id) => {
     isDeleting.value = false;
 }
 
+// 配置省市區選擇器
+const options = regionData;
+
 // 準備規則對象
 const rules = {
     receiver: [
@@ -101,24 +105,28 @@ const rules = {
     ],
     contact: [
         { required: true, message: '電話號碼不能為空', trigger: 'blur' },
-        // { min: 6, max: 14, message: '密碼長度為6~14個', trigger: 'blur' }
+        { min: 11, max: 11, message: '電話號碼格式不符', trigger: 'blur' }
     ],
     address: [
-        { required: true, message: '地址不能為空', trigger: 'blur' }
+        { required: true, message: '詳細地址不能為空', trigger: 'blur' }
     ]
 }
 
 // 新增地址 獲取form實例做統一校驗
 const formRef = ref(null)
 const onAddAddress = () => {
-    const { receiver, contact, address } = form.value
+    const { receiver, contact, address, selectedOptions } = form.value
     // // 調用實例方法
     formRef.value.validate(async (valid) => {
         // valid: 所有表單都通過校驗 才為 true
         console.log(valid) // 如果任一項為空 = false
         // 以valid作為判斷條件 如果通過校驗才執行
-        if (valid === true) {  // 填寫完整
-            await addAddressAPI(form.value)
+        if (valid === true) {  // 填寫完整 
+            const [province, city, countyCode] = selectedOptions;
+            const provinceCode = province + '0000'
+            const cityCode = city + '00'
+            const postalCode = countyCode
+            await addAddressAPI({ ...form.value, provinceCode, cityCode, countyCode, postalCode })
             // 提示用戶
             ElMessage({ type: 'success', message: '新增成功' })
             addDialog.value = false;
@@ -135,7 +143,19 @@ const onAddAddress = () => {
 const onUpdateAddress = () => {
     formRef.value.validate(async (valid) => {
         if (valid === true) {
-            await updateAddressAPI(updateForm.value.id, updateForm.value)
+            // 获取省、市、区代码
+            const [province, city, countyCode] = updateForm.value.selectedOptions;
+            // 添加四个0
+            const provinceCode = province + '0000';
+            const cityCode = city + '00'
+            const postalCode = countyCode
+            await updateAddressAPI(updateForm.value.id, {
+                ...updateForm.value,
+                provinceCode,
+                cityCode,
+                countyCode,
+                postalCode
+            })
             ElMessage({ type: 'success', message: '修改成功' })
             updateDialog.value = false;
             showDialog.value = false
@@ -151,13 +171,26 @@ const onUpdateAddress = () => {
 // 打開修改地址彈窗並賦值
 const openUpdateDialog = (item) => {
     console.log(item)
-    updateForm.value = { ...item }
+    console.log(item.fullLocation)
+    console.log(item.provinceCode, item.cityCode, item.countyCode )
+    // 为了保持原始数据不变，先创建一个副本
+    const updatedItem = { ...item }
+    // 截取省份编码的末尾两位零
+    updatedItem.provinceCode = item.provinceCode.slice(0, -4)
+    // 截取城市编码的末尾两位零
+    updatedItem.cityCode = item.cityCode.slice(0, -2)
+    // 赋值给 updateForm
+    updateForm.value = updatedItem;
+    updateForm.value.selectedOptions = [updatedItem.provinceCode, updatedItem.cityCode, item.countyCode]
+    console.log([updatedItem.provinceCode, updatedItem.cityCode, item.countyCode])
+    // updateForm.value = { ...item }
     updateDialog.value = true
 }
 
 // 離開彈窗時重置或清空數據
 const clearForm = () => {
     formRef.value.resetFields(); // 重置表单数据
+    form.value.selectedOptions = []; // 清空 el-cascader 的值
 }
 
 // 當 切換彈窗 打開時激活默認地址
@@ -173,7 +206,7 @@ watch(showDialog, (newVal) => {
 })
 
 // 創建訂單
-const createOrder = async() => {
+const createOrder = async () => {
     const res = await createOrderAPI({
         deliveryTimeType: 1,
         payType: 1,
@@ -343,8 +376,12 @@ onMounted(() => getCheckInfo())
             <el-form-item prop="contact" label="聯絡方式">
                 <el-input v-model="form.contact" placeholder="請输入電話號碼" />
             </el-form-item>
+
+            <!-- 请选择省市区 -->
+            <el-cascader v-model="form.selectedOptions" :options="options" placeholder="請選擇省市區" />
+
             <el-form-item prop="address" label="收貨地址">
-                <el-input v-model="form.address" placeholder="請输入地址" />
+                <el-input v-model="form.address" placeholder="請输入詳細地址" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -363,6 +400,8 @@ onMounted(() => getCheckInfo())
             <el-form-item prop="contact" label="聯絡方式">
                 <el-input v-model="updateForm.contact" placeholder="請输入電話號碼" />
             </el-form-item>
+            <!-- 请选择省市区 -->
+            <el-cascader v-model="updateForm.selectedOptions" :options="options" placeholder="請選擇省市區" />
             <el-form-item prop="address" label="收貨地址">
                 <el-input v-model="updateForm.address" placeholder="請输入地址" />
             </el-form-item>
