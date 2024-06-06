@@ -21,10 +21,10 @@ const radio = ref(null)         // 是否默認
 // 新增地址表单
 const form = ref({
     receiver: '',               // 姓名
-    contact: '00123456789',     // 联系方式
-    provinceCode: '',        // 省份编码 使用選取
-    cityCode: '',            // 城市编码 使用選取
-    countyCode: '',          // 地区编码 使用選取
+    contact: '12345612345',     // 联系方式
+    provinceCode: '00',        // 省份编码 使用選取
+    cityCode: '0000',            // 城市编码 使用選取
+    countyCode: '000000',          // 地区编码 使用選取
     address: '',                // 详细地址: 路
     postalCode: '',          // 邮政编码 使用選取 6位數
     addressTags: '家',         // 地址标签
@@ -109,6 +109,21 @@ const rules = {
     ],
     address: [
         { required: true, message: '詳細地址不能為空', trigger: 'blur' }
+    ],
+    selectedOptions: [
+        {
+            validator: (rule, value, callback) => {
+                console.log(value)
+                // 自定義校驗邏輯
+                if (value && value.length === 3) {
+                    callback()
+                } else {
+                    callback(new Error('请选择完整的省市区'))
+                }
+            },
+            trigger: 'change', // 触发校验的事件，可以根据需要修改
+            required: true
+        }
     ]
 }
 
@@ -116,6 +131,7 @@ const rules = {
 const formRef = ref(null)
 const onAddAddress = () => {
     const { receiver, contact, address, selectedOptions } = form.value
+    // const { receiver, contact, address } = form.value
     // // 調用實例方法
     formRef.value.validate(async (valid) => {
         // valid: 所有表單都通過校驗 才為 true
@@ -127,6 +143,7 @@ const onAddAddress = () => {
             const cityCode = city + '00'
             const postalCode = countyCode
             await addAddressAPI({ ...form.value, provinceCode, cityCode, countyCode, postalCode })
+            // await addAddressAPI(form.value)
             // 提示用戶
             ElMessage({ type: 'success', message: '新增成功' })
             addDialog.value = false;
@@ -172,7 +189,7 @@ const onUpdateAddress = () => {
 const openUpdateDialog = (item) => {
     console.log(item)
     console.log(item.fullLocation)
-    console.log(item.provinceCode, item.cityCode, item.countyCode )
+    console.log(item.provinceCode, item.cityCode, item.countyCode)
     // 为了保持原始数据不变，先创建一个副本
     const updatedItem = { ...item }
     // 截取省份编码的末尾两位零
@@ -191,6 +208,7 @@ const openUpdateDialog = (item) => {
 const clearForm = () => {
     formRef.value.resetFields(); // 重置表单数据
     form.value.selectedOptions = []; // 清空 el-cascader 的值
+    updateForm.value.selectedOptions = []; // 清空 el-cascader 的值
 }
 
 // 當 切換彈窗 打開時激活默認地址
@@ -376,11 +394,10 @@ onMounted(() => getCheckInfo())
             <el-form-item prop="contact" label="聯絡方式">
                 <el-input v-model="form.contact" placeholder="請输入電話號碼" />
             </el-form-item>
-
-            <!-- 请选择省市区 -->
-            <el-cascader v-model="form.selectedOptions" :options="options" placeholder="請選擇省市區" />
-
-            <el-form-item prop="address" label="收貨地址">
+            <el-form-item prop="selectedOptions" label="省/市/区">
+                <el-cascader v-model="form.selectedOptions" :options="options" placeholder="请选择省市区" />
+            </el-form-item>
+            <el-form-item prop="address" label="詳細地址">
                 <el-input v-model="form.address" placeholder="請输入詳細地址" />
             </el-form-item>
         </el-form>
@@ -400,8 +417,9 @@ onMounted(() => getCheckInfo())
             <el-form-item prop="contact" label="聯絡方式">
                 <el-input v-model="updateForm.contact" placeholder="請输入電話號碼" />
             </el-form-item>
-            <!-- 请选择省市区 -->
-            <el-cascader v-model="updateForm.selectedOptions" :options="options" placeholder="請選擇省市區" />
+            <el-form-item prop="selectedOptions" label="省/市/区">
+                <el-cascader v-model="updateForm.selectedOptions" :options="options" placeholder="請選擇省市區" />
+            </el-form-item>
             <el-form-item prop="address" label="收貨地址">
                 <el-input v-model="updateForm.address" placeholder="請输入地址" />
             </el-form-item>
