@@ -12,13 +12,17 @@ import { useUserStore } from '@/stores/userStore'
 const userStore = useUserStore()
 
 // 帳號一: 帳戶: xiaotuxian001 & 密碼: 123456
-// 帳號二: 帳戶: heima282 & 密碼: hm#qd@23!
+// 帳號二: 帳戶: 從 heima280 一直到 heima299 共二十個帳號 & 密碼: hm#qd@23!
+// 帳號三: 帳戶: heima292 & 密碼: hm#qd@23!
+// 帳號四: 帳戶: cdshi0088 & 密碼: 123456
+// 帳號五: 帳戶: heima293 & 密碼: 123456
+// 帳號七: 帳戶: heima295 & 密碼: hm#qd@23!
 
 // 1.準備表單對象
 const form = ref({
   account: 'heima282',
   password: 'hm#qd@23!',
-  agree: ''
+  agree: true
 })
 
 // 2.準備規則對象
